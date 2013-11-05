@@ -1,0 +1,6 @@
+[ui]
+username = Reinier Schoof <reinier@skoef.nl>
+verbose = True
+
+[extensions]
+color =
