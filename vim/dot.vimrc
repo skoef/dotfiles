@@ -1,7 +1,6 @@
-" nice colors
+" syntax and auto indenting
 syntax on
 set bg=dark
-" easy coding prefs
 set autoindent
 set nomodeline
 
@@ -11,11 +10,22 @@ set pastetoggle=<F12>
 
 " use :set list to show invisibles
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+" show trailing whitespace
+highlight TrailingWhitespace ctermbg=red guibg=red
+match TrailingWhitespace /\s\+$/
 
-" whitespace prefs
+" whitespace handling
 set smartindent
 set tabstop=4
 set shiftwidth=4
 
 " php syntax check
 au BufWritePost *.php !php -l %
+
+"" puppet handling
+" set filetype to puppet
+au BufRead,BufNewFile *.pp setfiletype puppet
+" before writing, remove trailing whitespace
+au BufWritePre *.pp :%s/\s\+$//e
+" after writing, parse file for validation
+au BufWritePost *.pp !puppet parser validate %
