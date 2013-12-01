@@ -1,3 +1,5 @@
+[core]
+	pager = less -r
 [user]
 	name = Reinier Schoof
 	email = reinier@skoef.nl
