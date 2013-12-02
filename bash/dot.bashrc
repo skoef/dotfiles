@@ -1,3 +1,4 @@
+# replace unix-word-rubout with backward-kill-word
 stty werase undef
 bind '"\C-w": backward-kill-word'
 
@@ -22,4 +23,11 @@ fi
 if [ ! -z "$(which vim)" -a -x "$(which vim)" ]
 then
 	alias vi="vim"
+fi
+
+# run python script on startup python interactive mode
+# in my case this script takes care of my history when using interactive mode
+if [ -r ${HOME}/.pystartup ]
+then
+	export PYTHONSTARTUP=${HOME}/.pystartup
 fi
