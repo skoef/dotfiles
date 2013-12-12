@@ -7,7 +7,7 @@ fi
 
 # define prompt colors
 # use another color on hosts from my employer
-if hostname | grep -qi 'transip'
+if hostname -f | grep -qi 'transip'
 then
 	basecolor="\e[1;34m"
 else
