@@ -1,6 +1,9 @@
 # replace unix-word-rubout with backward-kill-word
-stty werase undef
-bind '"\C-w": backward-kill-word'
+if [ ! -z "${TERM}" -a "${TERM}" != "dumb" ]
+then
+	stty werase undef
+	bind '"\C-w": backward-kill-word'
+fi
 
 # define prompt colors
 # use another color on hosts from my employer
@@ -29,5 +32,5 @@ fi
 # in my case this script takes care of my history when using interactive mode
 if [ -r ${HOME}/.pystartup ]
 then
-	export PYTHONSTARTUP=${HOME}/.pystartup
+	PYTHONSTARTUP=${HOME}/.pystartup; export PYTHONSTARTUP
 fi
