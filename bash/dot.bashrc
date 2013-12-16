@@ -1,5 +1,8 @@
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
 # replace unix-word-rubout with backward-kill-word
-if [ ! -z "${TERM}" -a "${TERM}" != "dumb" ]
+if [ ! -z "${TERM}" ] && [ "${TERM}" != "dumb" ]
 then
 	stty werase undef
 	bind '"\C-w": backward-kill-word'
@@ -7,7 +10,7 @@ fi
 
 # define prompt colors
 # use another color on hosts from my employer
-if hostname -f | grep -qi 'transip'
+if hostname 2>&1 | grep -qi 'transip' || hostname -f 2>&1 | grep -qi 'transip'
 then
 	basecolor="\e[1;34m"
 else
