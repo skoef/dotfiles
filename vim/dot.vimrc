@@ -17,7 +17,10 @@ match TrailingWhitespace /\s\+$/
 " whitespace handling
 set smartindent
 set tabstop=4
+set softtabstop=4
 set shiftwidth=4
+" rather spaces than tabs
+set expandtab
 
 " php syntax check
 au BufWritePost *.php !php -l %
