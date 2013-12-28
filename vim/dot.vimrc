@@ -8,6 +8,10 @@ set nomodeline
 " rather bind a key to toggle pasting
 set pastetoggle=<F12>
 
+" highlight current line
+set cursorline
+hi CursorLine cterm=NONE ctermbg=235 guibg=#262626
+
 " use :set list to show invisibles
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 " show trailing whitespace
@@ -22,7 +26,10 @@ set shiftwidth=4
 " rather spaces than tabs
 set expandtab
 
-" php syntax check
+"" php handling
+" before writing, remove trailing whitespace
+au BufWritePre *.php :%s/\s\+$//e
+" after writing, check syntax
 au BufWritePost *.php !php -l %
 
 "" puppet handling
