@@ -12,7 +12,9 @@ PATH="~/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
 export PATH
 
 # prefer vim over vi
-export EDITOR=vim
+[ -x /usr/local/bin/vim ] && EDITOR="/usr/local/bin/vim"
+[ -x /usr/bin/vim ] && EDITOR="/usr/bin/vim"
+export EDITOR
 
 # run a .bashrc file if it exists.
 [ -f ${HOME}/.bashrc ] && source ${HOME}/.bashrc
