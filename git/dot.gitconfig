@@ -1,5 +1,9 @@
-[core]
-	pager = less -r
 [user]
-	name = Reinier Schoof
-	email = reinier@skoef.nl
+    name = Reinier Schoof
+    email = reinier@skoef.nl
+[core]
+    pager = less -r
+[diff]
+    renames = true
+[color]
+    ui = true
