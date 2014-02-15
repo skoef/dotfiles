@@ -9,6 +9,11 @@ export LANG=en_US.UTF-8
 export CLICOLOR=1
 export LSCOLORS="Exfxcxdxbxegedabagacad"
 
+# set timezone
+if [ -r /etc/timezone ]; then
+    TZ=$(cat /etc/timezone); export TZ
+fi
+
 # compose path
 PATH="~/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
 [ -d /usr/local/adm/bin ] && PATH="${PATH}:/usr/local/adm/bin"

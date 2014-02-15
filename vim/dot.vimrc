@@ -35,7 +35,13 @@ au BufWritePost *.php !php -l %
 "" puppet handling
 " set filetype to puppet
 au BufRead,BufNewFile *.pp setfiletype puppet
+" alter whitespace handling
+au FileType puppet setlocal tabstop=2 softtabstop=2 shiftwidth=2
 " before writing, remove trailing whitespace
 au BufWritePre *.pp :%s/\s\+$//e
 " after writing, parse file for validation
 au BufWritePost *.pp !puppet parser validate %
+
+"" python handling
+" don't expand tabs in python plz
+au Filetype python setlocal noexpandtab
