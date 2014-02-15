@@ -29,11 +29,14 @@ else
     PS1="\[${basecolor}\][\u@$(hostname -f 2>/dev/null || hostname) \W]\\$\[\e[0m\] "
 fi
 
-# aliases
+# prefer vim over vi
 if [ ! -z "$(which vim)" -a -x "$(which vim)" ]
 then
     alias vi="vim"
 fi
+
+# always keep environment when user sudo
+alias sudo="sudo -E"
 
 # run python script on startup python interactive mode
 # in my case this script takes care of my history when using interactive mode
