@@ -45,3 +45,7 @@ au BufWritePost *.pp !puppet parser validate %
 "" python handling
 " don't expand tabs in python plz
 au Filetype python setlocal noexpandtab
+
+"" yaml handling
+" alter whitespace handling
+au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2
