@@ -26,6 +26,9 @@ set shiftwidth=4
 " rather spaces than tabs
 set expandtab
 
+" stop the "Can't open file for writing" rages
+cnoremap sudow w !sudo tee % >/dev/null
+
 "" php handling
 " before writing, remove trailing whitespace
 au BufWritePre *.php :%s/\s\+$//e
