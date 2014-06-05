@@ -1,3 +1,10 @@
+# Bash preferences
+HISTCONTROL=ignoredups
+HISTFILESIZE=2000
+HISTSIZE=1000
+shopt -s histappend
+shopt -s checkwinsize
+
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
