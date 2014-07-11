@@ -29,11 +29,12 @@ set expandtab
 " stop the "Can't open file for writing" rages
 cnoremap sudow w !sudo tee % >/dev/null
 
+"" syntax check wrapper
+au BufWritePost * !~/.vimchk
+
 "" php handling
 " before writing, remove trailing whitespace
 au BufWritePre *.php :%s/\s\+$//e
-" after writing, check syntax
-au BufWritePost *.php !php -l %
 
 "" puppet handling
 " set filetype to puppet
@@ -42,8 +43,6 @@ au BufRead,BufNewFile *.pp setfiletype puppet
 au FileType puppet setlocal tabstop=2 softtabstop=2 shiftwidth=2
 " before writing, remove trailing whitespace
 au BufWritePre *.pp :%s/\s\+$//e
-" after writing, parse file for validation
-au BufWritePost *.pp !puppet parser --parser future validate %
 
 "" python handling
 " don't expand tabs in python plz

@@ -1,0 +1,78 @@
+#!/bin/sh
+
+usage() {
+    echo "$(basename ${0}) -f filename [-t filetype]"
+    exit 1
+}
+
+# is linter present
+checklinter() {
+    local _filetype _linter
+    _filetype=${1}
+    _linter=${2}
+
+    if [ ! -x ${_linter} ] && [ ! -x $(which ${_linter}) ]; then
+        echo "could not find linter ${_linter} for type ${_filetype}"
+        exit 1
+    fi
+
+    return 0
+}
+
+# run linter on file
+check() {
+    local _linter _cmd _regexp
+    _linter=${1}
+    _cmd="${2} 2>&1"
+    _regexp=${3}
+
+    echo -n "${_linter}: "
+    [ ! -z "${_regexp}" ] && _cmd="${_cmd} | grep -vE '${_regexp}'"
+    _output=$(eval ${_cmd})
+    if [ -z "${_output}" ]; then
+        echo "OK"
+    else
+        echo "FAIL"
+        echo ${_output}
+    fi
+}
+
+while getopts f:t:h opt; do
+    case "${opt}" in
+        f) filename=${OPTARG} ;;
+        t) filetype=${OPTARG} ;;
+        h) usage ;;
+        *) usage ;;
+    esac
+done
+
+[ -z "${filename}" ] && usage
+[ -z "${filetype}" ] && filetype=${filename##*.}
+
+if [ ! -f ${filename} ]; then
+    echo "no such file ${filename}"
+    exit 1
+elif [ ! -r ${filename} ]; then
+    echo "${filename} is not readable, permission denied"
+    exit 1
+fi
+
+case ${filetype} in
+    pp|puppet)
+        checklinter puppet puppet
+        check puppet "puppet parser --parser future validate ${filename}"
+        if [ -x $(which puppet-lint) ]; then
+            check puppet-lint "puppet-lint --with-filename ${filename}"
+        fi
+        ;;
+    php)
+        checklinter php php
+        check php "php -l ${filename}" '^No syntax errors detected in '
+        ;;
+    erb)
+        checklinter erb ruby
+        checklinter erb erb
+        check erb "erb -x -T '-' -P ${filename} | ruby -c" "Syntax OK"
+        ;;
+    *) ;;
+esac
