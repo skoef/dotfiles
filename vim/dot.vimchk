@@ -74,5 +74,9 @@ case ${filetype} in
         checklinter erb erb
         check erb "erb -x -T '-' -P ${filename} | ruby -c" "Syntax OK"
         ;;
+    sh|shell)
+        # no need to check for sh presence :)
+        check sh "sh -n ${filename}"
+        ;;
     *) ;;
 esac
