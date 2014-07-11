@@ -30,7 +30,7 @@ set expandtab
 cnoremap sudow w !sudo tee % >/dev/null
 
 "" syntax check wrapper
-au BufWritePost * !~/.vimchk
+au BufWritePost * !~/.vimchk -f %
 
 "" php handling
 " before writing, remove trailing whitespace
