@@ -6,14 +6,14 @@ usage() {
 }
 
 # is linter present
-checklinter() {
-    local _filetype _linter
-    _filetype=${1}
-    _linter=${2}
+haslinter() {
+    local _linter
+    _linter=${1}
+
+    [ -z "$(which ${_linter})" ] && return 1
 
     if [ ! -x ${_linter} ] && [ ! -x $(which ${_linter}) ]; then
-        echo "could not find linter ${_linter} for type ${_filetype}"
-        exit 1
+        return 1
     fi
 
     return 0
@@ -59,20 +59,23 @@ fi
 
 case ${filetype} in
     pp|puppet)
-        checklinter puppet puppet
-        check puppet "puppet parser --parser future validate ${filename}"
-        if [ -x $(which puppet-lint) ]; then
+        if haslinter puppet; then
+            check puppet "puppet parser --parser future validate ${filename}"
+        fi
+
+        if haslinter puppet-lint; then
             check puppet-lint "puppet-lint --with-filename ${filename}"
         fi
         ;;
     php)
-        checklinter php php
-        check php "php -l ${filename}" '^No syntax errors detected in '
+        if haslinter php; then
+            check php "php -l ${filename}" '^No syntax errors detected in '
+        fi
         ;;
     erb)
-        checklinter erb ruby
-        checklinter erb erb
-        check erb "erb -x -T '-' -P ${filename} | ruby -c" "Syntax OK"
+        if haslinter erb && haslinter ruby; then
+            check erb "erb -x -T '-' -P ${filename} | ruby -c" "Syntax OK"
+        fi
         ;;
     sh|shell)
         # no need to check for sh presence :)
