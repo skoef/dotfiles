@@ -28,7 +28,7 @@ check() {
 
     echo -n "${_linter}: "
     [ ! -z "${_regexp}" ] && _cmd="${_cmd} | grep -vE '${_regexp}'"
-    if ! _tmpfile=`mktemp -t vimchk`; then
+    if ! _tmpfile=`mktemp -t vimchk.XXXX`; then
         echo "FAIL, could not create tmpfile"
         return 1
     fi
