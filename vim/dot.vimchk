@@ -21,20 +21,27 @@ haslinter() {
 
 # run linter on file
 check() {
-    local _linter _cmd _regexp
+    local _linter _cmd _regexp _tmpfile
     _linter=${1}
     _cmd="${2} 2>&1"
     _regexp=${3}
 
     echo -n "${_linter}: "
     [ ! -z "${_regexp}" ] && _cmd="${_cmd} | grep -vE '${_regexp}'"
-    _output=$(eval ${_cmd})
-    if [ -z "${_output}" ]; then
-        echo "OK"
-    else
-        echo "FAIL"
-        echo ${_output}
+    if ! _tmpfile=`mktemp -t vimchk`; then
+        echo "FAIL, could not create tmpfile"
+        return 1
     fi
+
+    eval ${_cmd} > ${_tmpfile}
+    if [ -s ${_tmpfile} ]; then
+        echo "FAIL:"
+        cat ${_tmpfile}
+    else
+        echo "OK"
+    fi
+
+    rm ${_tmpfile}
 }
 
 while getopts f:t:h opt; do
