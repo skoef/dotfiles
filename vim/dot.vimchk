@@ -89,6 +89,11 @@ case ${filetype} in
             check ruby "ruby -c ${filename}" "Syntax OK"
         fi
         ;;
+    py|python)
+        if haslinter python; then
+            check python "python -m py_compile ${filename}"
+        fi
+        ;;
     sh|shell)
         # no need to check for sh presence :)
         check sh "sh -n ${filename}"
