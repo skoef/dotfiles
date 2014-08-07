@@ -98,5 +98,10 @@ case ${filetype} in
         # no need to check for sh presence :)
         check sh "sh -n ${filename}"
         ;;
+    yaml)
+        if haslinter ruby; then
+            check yaml "ruby -e \"require 'yaml'; YAML.parse(File.open('${filename}'))\""
+        fi
+        ;;
     *) ;;
 esac
