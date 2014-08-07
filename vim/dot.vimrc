@@ -18,8 +18,12 @@ set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 highlight TrailingWhitespace ctermbg=red guibg=red
 match TrailingWhitespace /\s\+$/
 
-" whitespace handling
+" enable 'smart' indenting
 set smartindent
+" don't mess with the hash
+inoremap # X<BS>#
+
+" whitespace handling
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
