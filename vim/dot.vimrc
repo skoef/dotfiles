@@ -12,6 +12,9 @@ set pastetoggle=<F12>
 set cursorline
 hi CursorLine cterm=NONE ctermbg=235 guibg=#262626
 
+" show line/progress at bottom right
+set ruler
+
 " use :set list to show invisibles
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 " show trailing whitespace
