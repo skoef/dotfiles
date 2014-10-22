@@ -11,6 +11,7 @@ class skel (
   $config_file_owner   = $skel::params::config_file_owner,
   $config_file_group   = $skel::params::config_file_group,
   $config_file_mode    = $skel::params::config_file_mode,
+  $logfile             = $skel::params::logfile,
   $pidfile             = $skel::params::pidfile,
   $template            = $skel::params::template,
   $firewall            = $skel::params::firewall,
