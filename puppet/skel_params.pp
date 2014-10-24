@@ -38,7 +38,8 @@ class skel::params {
   $disableboot         = false
   $service_autorestart = true
   $config_file_mode    = '0644'
-  $template            = 'skel/skel.conf.erb'
+  $source              = ''
+  $template            = ''
   $firewall            = false
   $firewall_src        = ['0.0.0.0', '::/0']
   $firewall_dst        = ['0.0.0.0', '::/0']

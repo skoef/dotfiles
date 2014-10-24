@@ -13,6 +13,7 @@ class skel (
   $config_file_mode    = $skel::params::config_file_mode,
   $logfile             = $skel::params::logfile,
   $pidfile             = $skel::params::pidfile,
+  $source              = $skel::params::source,
   $template            = $skel::params::template,
   $firewall            = $skel::params::firewall,
   $firewall_src        = $skel::params::firewall_src,
@@ -50,7 +51,7 @@ class skel (
   }
 
   $manage_service_autorestart = $skel::bool_service_autorestart ? {
-    true  => "Service[${skel::service_name}]",
+    true  => "Service[skel]",
     false => undef,
   }
 
@@ -59,27 +60,42 @@ class skel (
     false => 'file',
   }
 
+  $manage_file_source = $skel::source ? {
+    ''      => undef,
+    default => $skel::source,
+  }
+
+  $manage_file_content = $skel::template ? {
+    ''      => undef,
+    default => template($skel::template),
+  }
+
   $manage_directory_ensure = $skel::bool_absent ? {
     true  => 'absent',
-    false => 'file',
+    false => 'directory',
   }
 
-  package { $skel::package_name:
+  package { 'skel':
     ensure => $manage_package_ensure,
+    name   => $skel::package_name,
   }
 
-  service { $skel::service_name:
+  service { 'skel':
     ensure  => $manage_service_ensure,
+    name    => $skel::service_name,
     enable  => $manage_service_enable,
-    require => Package[$skel::package_name],
+    require => Package['skel'],
   }
 
   file { 'skel.conf':
+    ensure  => $manage_file_ensure,
     path    => $skel::config_file,
     owner   => $skel::config_file_owner,
     group   => $skel::config_file_group,
     mode    => $skel::config_file_source,
-    content => template($skel::template),
+    source  => $manage_file_source,
+    content => $manage_file_content,
     notify  => $manage_service_autorestart,
+    require => Package['skel'],
   }
 }
