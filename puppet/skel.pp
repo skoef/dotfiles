@@ -12,10 +12,12 @@ class skel (
   $config_file_group   = $skel::params::config_file_group,
   $config_file_mode    = $skel::params::config_file_mode,
   $pidfile             = $skel::params::pidfile,
+  $source              = $skel::params::source,
   $template            = $skel::params::template,
   $firewall            = $skel::params::firewall,
   $firewall_src        = $skel::params::firewall_src,
   $firewall_dst        = $skel::params::firewall_dst,
+  $firewall_port       = $skel::params::firewall_port,
 ) inherits skel::params {
 
   $bool_absent              = any2bool($absent)
@@ -60,15 +62,29 @@ class skel (
 
   $manage_directory_ensure = $skel::bool_absent ? {
     true  => 'absent',
-    false => 'file',
+    false => 'directory',
   }
 
-  package { $skel::package_name:
+  $manage_config_source = $skel::source ? {
+    ''      => undef,
+    undef   => undef,
+    default => $skel::source,
+  }
+
+  $manage_config_content = $skel::template ? {
+    ''      => undef,
+    undef   => undef,
+    default => template($skel::template),
+  }
+
+  package { 'skel':
     ensure => $manage_package_ensure,
+    name   => $skel::package_name,
   }
 
-  service { $skel::service_name:
+  service { 'skel':
     ensure  => $manage_service_ensure,
+    name    => $skel::service_name,
     enable  => $manage_service_enable,
     require => Package[$skel::package_name],
   }
@@ -77,8 +93,19 @@ class skel (
     path    => $skel::config_file,
     owner   => $skel::config_file_owner,
     group   => $skel::config_file_group,
-    mode    => $skel::config_file_source,
-    content => template($skel::template),
+    mode    => $skel::config_file_mode,
+    content => $manage_config_content,
+    source  => $manage_config_source,
     notify  => $manage_service_autorestart,
+  }
+
+  if $bool_firewall == true {
+    firewall::rule { 'skel-allow-in':
+      protocol    => 'tcp',
+      port        => $firewall_port,
+      direction   => 'input',
+      source      => $firewall_src,
+      destination => $firewall_dst,
+    }
   }
 }
