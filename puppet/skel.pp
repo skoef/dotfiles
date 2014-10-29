@@ -105,15 +105,9 @@ class skel (
     path    => $skel::config_file,
     owner   => $skel::config_file_owner,
     group   => $skel::config_file_group,
-<<<<<<< HEAD
     mode    => $skel::config_file_mode,
-    content => $manage_config_content,
-    source  => $manage_config_source,
-=======
-    mode    => $skel::config_file_source,
     source  => $manage_file_source,
     content => $manage_file_content,
->>>>>>> 72af1841084d87682a67cd76b0e26b9145dc4f43
     notify  => $manage_service_autorestart,
     require => Package['skel'],
   }
