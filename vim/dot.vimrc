@@ -58,3 +58,7 @@ au Filetype python setlocal noexpandtab
 "" yaml handling
 " alter whitespace handling
 au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2
+
+""" Makefile handling
+" don't expand tabs in Makefiles plz
+au FileType make setlocal noexpandtab
