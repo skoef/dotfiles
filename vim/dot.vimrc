@@ -33,6 +33,9 @@ set shiftwidth=4
 " rather spaces than tabs
 set expandtab
 
+" please no mouse handling
+set mouse=
+
 " stop the "Can't open file for writing" rages
 cnoremap sudow w !sudo tee % >/dev/null
 
