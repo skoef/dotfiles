@@ -17,11 +17,11 @@ class skel::params {
     default        => 'root',
   }
 
-  $logfile = $::operatingsystem ? {
+  $log_file = $::operatingsystem ? {
     default => '/var/log/skel.log',
   }
 
-  $pidfile = $::operatingsystem ? {
+  $pid_file = $::operatingsystem ? {
     /(?i:FreeBSD)/ => '/var/run/skel.pid',
   }
 

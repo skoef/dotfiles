@@ -11,8 +11,8 @@ class skel (
   $config_file_owner   = $skel::params::config_file_owner,
   $config_file_group   = $skel::params::config_file_group,
   $config_file_mode    = $skel::params::config_file_mode,
-  $logfile             = $skel::params::logfile,
-  $pidfile             = $skel::params::pidfile,
+  $log_file            = $skel::params::log_file,
+  $pid_file            = $skel::params::pid_file,
   $source              = $skel::params::source,
   $template            = $skel::params::template,
   $firewall            = $skel::params::firewall,
@@ -21,11 +21,11 @@ class skel (
   $firewall_port       = $skel::params::firewall_port,
 ) inherits skel::params {
 
-  $bool_absent              = any2bool($absent)
-  $bool_disable             = any2bool($disable)
-  $bool_disableboot         = any2bool($disableboot)
-  $bool_service_autorestart = any2bool($service_autorestart)
-  $bool_firewall            = any2bool($firewall)
+  $bool_absent              = str2bool($absent)
+  $bool_disable             = str2bool($disable)
+  $bool_disableboot         = str2bool($disableboot)
+  $bool_service_autorestart = str2bool($service_autorestart)
+  $bool_firewall            = str2bool($firewall)
 
   $manage_package_ensure = $skel::bool_absent ? {
     true  => 'absent',
@@ -52,7 +52,7 @@ class skel (
   }
 
   $manage_service_autorestart = $skel::bool_service_autorestart ? {
-    true  => "Service[skel]",
+    true  => 'Service[skel]',
     false => undef,
   }
 
@@ -74,18 +74,6 @@ class skel (
   $manage_directory_ensure = $skel::bool_absent ? {
     true  => 'absent',
     false => 'directory',
-  }
-
-  $manage_config_source = $skel::source ? {
-    ''      => undef,
-    undef   => undef,
-    default => $skel::source,
-  }
-
-  $manage_config_content = $skel::template ? {
-    ''      => undef,
-    undef   => undef,
-    default => template($skel::template),
   }
 
   package { 'skel':
