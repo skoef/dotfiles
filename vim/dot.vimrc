@@ -60,7 +60,8 @@ au Filetype python setlocal noexpandtab
 
 "" yaml handling
 " alter whitespace handling
-au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2
+" disabling cursorline is a major performance increase
+au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2 nocursorline
 
 """ Makefile handling
 " don't expand tabs in Makefiles plz
