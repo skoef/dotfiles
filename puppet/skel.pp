@@ -19,6 +19,7 @@ class skel (
   $firewall_src        = $skel::params::firewall_src,
   $firewall_dst        = $skel::params::firewall_dst,
   $firewall_port       = $skel::params::firewall_port,
+  $my_class            = $skel::params::my_class,
 ) inherits skel::params {
 
   $bool_absent              = str2bool($absent)
@@ -74,6 +75,10 @@ class skel (
   $manage_directory_ensure = $skel::bool_absent ? {
     true  => 'absent',
     false => 'directory',
+  }
+
+  if $skel::my_class != '' {
+    include $skel::my_class
   }
 
   package { 'skel':

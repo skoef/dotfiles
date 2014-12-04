@@ -44,4 +44,5 @@ class skel::params {
   $firewall_src        = ['0.0.0.0', '::/0']
   $firewall_dst        = ['0.0.0.0', '::/0']
   $firewall_port       = 0
+  $my_class            = ''
 }
