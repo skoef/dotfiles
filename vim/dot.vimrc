@@ -14,6 +14,7 @@ hi CursorLine cterm=NONE ctermbg=235 guibg=#262626
 
 " show line/progress at bottom right
 set ruler
+set laststatus=2
 
 " use :set list to show invisibles
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
