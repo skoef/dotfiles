@@ -105,13 +105,12 @@ class skel (
     require => Package['skel'],
   }
 
-  if $bool_firewall == true {
-    firewall::rule { 'skel-allow-in':
-      protocol    => 'tcp',
-      port        => $firewall_port,
-      direction   => 'input',
-      source      => $firewall_src,
-      destination => $firewall_dst,
-    }
+  firewall::rule { 'skel-allow-in':
+    protocol    => 'tcp',
+    port        => $firewall_port,
+    direction   => 'input',
+    source      => $firewall_src,
+    destination => $firewall_dst,
+    enable      => $bool_firewall,
   }
 }
