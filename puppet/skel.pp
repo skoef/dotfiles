@@ -77,6 +77,14 @@ class skel (
     false => 'directory',
   }
 
+  $manage_firewall_enable = $skel::bool_absent ? {
+    true  => false,
+    false => $skel::bool_disable ? {
+      true  => false,
+      false => $skel::bool_firewall,
+    }
+  }
+
   if $skel::my_class != '' {
     include $skel::my_class
   }
@@ -111,6 +119,6 @@ class skel (
     direction   => 'input',
     source      => $firewall_src,
     destination => $firewall_dst,
-    enable      => $bool_firewall,
+    enable      => $manage_firewall_enable,
   }
 }
