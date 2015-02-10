@@ -22,28 +22,34 @@ fi
 
 export PROMPT_COMMAND=__prompt_command
 
+__bash_bold_green='\[\e[1;32m\]'
+__bash_bold_blue='\[\e[1;34m\]'
+__bash_bold_red='\[\e[1;31m\]'
+__bash_txt_green='\[\e[0;32m\]'
+__bash_txt_white='\[\e[0;37m\]'
+__bash_txt_reset='\[\e[0m\]'
+
 function __prompt_command() {
-    local EXIT="${?}"
-    local basecolor="\[\e[1;32m\]"
-    local delcolor="\[\e[0m\]"
-    local exitchar
+    local exitcode=$?
     local myhost=$(hostname -f 2>/dev/null || hostname)
+    local basecolor=$__bash_bold_green
+    local delcolor=$__bash_txt_white
+    local exitchar="${__bash_txt_green}✓"
+    
     # at work I'd like a different color
     if hostname 2>&1 | grep -qi 'transip' || hostname -f 2>&1 | grep -qi 'transip'; then
-        basecolor="\[\e[1;34m\]"
+        basecolor=$__bash_bold_blue
     fi
     # root wants another color brackets
     if [ "$(whoami)" = "root" ]; then
-        delcolor="\[\e[1;31m\]"
+        delcolor=$__bash_bold_red
     fi
     # reflect exit code
-    if [ ${EXIT} -eq 0 ]; then
-        exitchar="\[\e[0;32m✓\]"
-    else
-        exitchar="\[\e[1;31mx\]"
+    if [ $exitcode -ne 0 ]; then
+        exitchar="${__bash_bold_red}x"
     fi
 
-    PS1="${delcolor}[${basecolor}\u@${myhost} \W${delcolor}] ${exitchar} \[\e[0m\]# "
+    PS1="${delcolor}[${basecolor}\u@${myhost} \W${delcolor}] ${exitchar} ${__bash_txt_reset}# "
 }
 
 # prefer vim over vi
