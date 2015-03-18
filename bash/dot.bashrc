@@ -50,7 +50,7 @@ function __prompt_command() {
     if [ $exitcode -ne 0 ]; then
         exitchar="${__bash_bold_red}x"
     elif [[ $(tty) =~ /dev/pts/[0-9]+ ]]; then
-        exitchar="${__bash_txt_green}"$'\u2713'
+        exitchar="${__bash_txt_green}"$'\xe2\x9c\x93\0a'
     else
         exitchar="${__bash_txt_green}v"
     fi
