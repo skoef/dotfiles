@@ -95,8 +95,13 @@ case ${filetype} in
         fi
         ;;
     sh|shell)
-        # no need to check for sh presence :)
-        check sh "sh -n ${filename}"
+        if head -1 ${filename} | grep -q bash && \
+            haslinter bash; then
+            check bash "bash -n ${filename}"
+        else
+            # no need to check for sh presence :)
+            check sh "sh -n ${filename}"
+        fi
         ;;
     yaml)
         if haslinter ruby; then
