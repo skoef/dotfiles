@@ -100,6 +100,7 @@ lint() {
             # unknown file type
             # try to get filetype from shebang
             filetype=$(head -1 ${filename} | \
+              sed 'sX^#!/usr/bin/env XX' | \
               awk '{print $1}' | \
               sed -E 's/^#!//' | \
               awk -F '/' '{print $NF}')
