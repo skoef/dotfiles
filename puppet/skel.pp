@@ -1,4 +1,4 @@
-# Documentation goes here
+# skel class
 class skel (
   $service_name        = $skel::params::service_name,
   $package_name        = $skel::params::package_name,

@@ -1,4 +1,4 @@
-#
+# skel class default
 class skel::params {
   $config_dir = $::operatingsystem ? {
     /(?i:FreeBSD)/ => '/usr/local/etc/skel',
@@ -26,7 +26,7 @@ class skel::params {
   }
 
   $package_name = $::operatingsystem ? {
-    /(?i:FreeBSD)/ => 'dummy/skel',
+    /(?i:FreeBSD)/ => 'skel',
   }
 
   $service_name = $::operatingsystem ? {
