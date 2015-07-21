@@ -66,6 +66,8 @@ fi
 
 # always keep environment when user sudo
 alias sudo="sudo -E"
+# I like solarized for mutt, so set TERM to make it work
+alias mutt="TERM=xterm-256color mutt"
 
 # run python script on startup python interactive mode
 # in my case this script takes care of my history when using interactive mode
