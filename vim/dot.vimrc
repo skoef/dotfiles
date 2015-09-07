@@ -21,6 +21,8 @@ set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 " show trailing whitespace
 highlight TrailingWhitespace ctermbg=red guibg=red
 match TrailingWhitespace /\s\+$/
+" add shortkey for toggling listchars
+nnoremap <F11> :set list!<cr>
 
 " enable 'smart' indenting
 set smartindent
