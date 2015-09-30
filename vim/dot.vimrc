@@ -35,6 +35,7 @@ set softtabstop=4
 set shiftwidth=4
 " rather spaces than tabs
 set expandtab
+command Rtrim :%s/\s\+$//e
 
 " please no mouse handling
 set mouse=
@@ -47,7 +48,7 @@ au BufWritePost * !~/.vimchk -f %
 
 "" php handling
 " before writing, remove trailing whitespace
-au BufWritePre *.php :%s/\s\+$//e
+au BufWritePre *.php :Rtrim
 
 "" puppet handling
 " set filetype to puppet
@@ -55,7 +56,7 @@ au BufRead,BufNewFile *.pp setfiletype puppet
 " alter whitespace handling
 au FileType puppet setlocal tabstop=2 softtabstop=2 shiftwidth=2
 " before writing, remove trailing whitespace
-au BufWritePre *.pp :%s/\s\+$//e
+au BufWritePre *.pp :Rtrim
 
 "" python handling
 " don't expand tabs in python plz
