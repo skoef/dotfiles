@@ -2,6 +2,7 @@
 HISTCONTROL=ignoredups
 HISTFILESIZE=2000
 HISTSIZE=1000
+HISTIGNORE="reboot:shutdown *:history"
 shopt -s histappend
 shopt -s checkwinsize
 set +o histexpand
@@ -25,17 +26,21 @@ export PROMPT_COMMAND=__prompt_command
 __bash_bold_green='\[\e[1;32m\]'
 __bash_bold_blue='\[\e[1;34m\]'
 __bash_bold_red='\[\e[1;31m\]'
+__bash_bold_yellow='\[\e[1;33m\]'
 __bash_txt_green='\[\e[0;32m\]'
 __bash_txt_white='\[\e[0;37m\]'
 __bash_txt_reset='\[\e[0m\]'
 
 function __prompt_command() {
-    local exitcode=$?
-    local myhost=$(hostname -f 2>/dev/null || hostname)
-    local basecolor=$__bash_bold_green
-    local delcolor=$__bash_txt_white
-    local exitchar
-    local bang='$'
+    local exitcode=$? \
+          myhost=$(hostname -f 2>/dev/null || hostname) \
+          basecolor=$__bash_bold_green \
+          delcolor=$__bash_txt_white \
+          bang='$' \
+          exitchar lvlprefix
+
+    # when in subshell, show prefix
+    [ ${SHLVL} -gt 1 ] && lvlprefix=$(seq $((${SHLVL} - 1)) | xargs -IX echo -n "${__bash_bold_yellow}»")" "
 
     # at work I'd like a different color
     if [[ $(hostname -f 2>&1 || hostname 2>&1) =~ 'transip' ]]; then
@@ -55,7 +60,7 @@ function __prompt_command() {
         exitchar="${__bash_txt_green}v"
     fi
 
-    PS1="${delcolor}[${basecolor}\u@${myhost} \W${delcolor}] ${exitchar} ${__bash_txt_reset}${bang} "
+    PS1="${delcolor}[${basecolor}\u@${myhost} \W${delcolor}] ${lvlprefix}${exitchar} ${__bash_txt_reset}${bang} "
 }
 
 # prefer vim over vi
