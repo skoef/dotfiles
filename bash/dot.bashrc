@@ -37,10 +37,19 @@ function __prompt_command() {
           basecolor=$__bash_bold_green \
           delcolor=$__bash_txt_white \
           bang='$' \
-          exitchar lvlprefix
+          exitchar lvlprefix okchar lvlchar
+
+    # plain or utf8 chars
+    if [[ $(tty) =~ /dev/pts/[0-9]+ ]]; then
+        okchar=$'\xe2\x9c\x93\0a'
+        lvlchar=$'\xc2\xbb'
+    else
+        okchar="v"
+        lvlchar=">"
+    fi
 
     # when in subshell, show prefix
-    [ ${SHLVL} -gt 1 ] && lvlprefix=$(seq $((${SHLVL} - 1)) | xargs -IX echo -n "${__bash_bold_yellow}"$'\xc2\xbb')" "
+    [ ${SHLVL} -gt 1 ] && lvlprefix=$(seq $((${SHLVL} - 1)) | xargs -IX echo -n "${__bash_bold_yellow}${lvlchar}")" "
 
     # at work I'd like a different color
     if [[ $(hostname -f 2>&1 || hostname 2>&1) =~ 'transip' ]]; then
@@ -54,10 +63,8 @@ function __prompt_command() {
     # reflect exit code
     if [ $exitcode -ne 0 ]; then
         exitchar="${__bash_bold_red}x"
-    elif [[ $(tty) =~ /dev/pts/[0-9]+ ]]; then
-        exitchar="${__bash_txt_green}"$'\xe2\x9c\x93\0a'
     else
-        exitchar="${__bash_txt_green}v"
+        exitchar="${__bash_txt_green}${okchar}"
     fi
 
     PS1="${delcolor}[${basecolor}\u@${myhost} \W${delcolor}] ${lvlprefix}${exitchar} ${__bash_txt_reset}${bang} "
