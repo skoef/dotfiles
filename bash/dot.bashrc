@@ -40,7 +40,7 @@ function __prompt_command() {
           exitchar lvlprefix
 
     # when in subshell, show prefix
-    [ ${SHLVL} -gt 1 ] && lvlprefix=$(seq $((${SHLVL} - 1)) | xargs -IX echo -n "${__bash_bold_yellow}»")" "
+    [ ${SHLVL} -gt 1 ] && lvlprefix=$(seq $((${SHLVL} - 1)) | xargs -IX echo -n "${__bash_bold_yellow}"$'\xc2\xbb')" "
 
     # at work I'd like a different color
     if [[ $(hostname -f 2>&1 || hostname 2>&1) =~ 'transip' ]]; then
