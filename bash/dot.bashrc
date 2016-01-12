@@ -23,6 +23,7 @@ fi
 
 export PROMPT_COMMAND=__prompt_command
 
+# define color vars
 __bash_bold_green='\[\e[1;32m\]'
 __bash_bold_blue='\[\e[1;34m\]'
 __bash_bold_red='\[\e[1;31m\]'
@@ -31,43 +32,39 @@ __bash_txt_green='\[\e[0;32m\]'
 __bash_txt_white='\[\e[0;37m\]'
 __bash_txt_reset='\[\e[0m\]'
 
+# set prompt defaults
+__bash_my_host=$(hostname -f 2>/dev/null || hostname)
+__bash_base_color=$__bash_bold_green
+__bash_delim_color=$__bash_txt_white
+__bash_level_prefix=
+__bash_bang_char='$'
+__bash_ok_char='v'
+__bash_level_char='>'
+
+# use different colors at work
+[[ $(hostname -f 2>&1 || hostname 2>&1) =~ 'transip' ]] && __bash_base_color=$__bash_bold_blue
+# use slightly different prompt when operating as root
+if [ "$(whoami)" = "root" ]; then
+    __bash_delim_color=$__bash_bold_red
+    __bash_bang_char='#'
+fi
+# use UTF8 chars when available
+if [[ $(tty) =~ /dev/pts/[0-9]+ ]]; then
+    __bash_ok_char=$'\xe2\x9c\x93\0a'
+    __bash_level_char=$'\xc2\xbb'
+fi
+
+# reflect amount of levels deep we are
+[ ${SHLVL} -gt 1 ] && __bash_level_prefix=$(seq $((${SHLVL} - 1)) | xargs -IX echo -n "${__bash_bold_yellow}${__bash_level_char}")" "
+
 function __prompt_command() {
     local exitcode=$? \
-          myhost=$(hostname -f 2>/dev/null || hostname) \
-          basecolor=$__bash_bold_green \
-          delcolor=$__bash_txt_white \
-          bang='$' \
-          exitchar lvlprefix okchar lvlchar
+          exitchar="${__bash_txt_green}${__bash_ok_char}"
 
-    # plain or utf8 chars
-    if [[ $(tty) =~ /dev/pts/[0-9]+ ]]; then
-        okchar=$'\xe2\x9c\x93\0a'
-        lvlchar=$'\xc2\xbb'
-    else
-        okchar="v"
-        lvlchar=">"
-    fi
-
-    # when in subshell, show prefix
-    [ ${SHLVL} -gt 1 ] && lvlprefix=$(seq $((${SHLVL} - 1)) | xargs -IX echo -n "${__bash_bold_yellow}${lvlchar}")" "
-
-    # at work I'd like a different color
-    if [[ $(hostname -f 2>&1 || hostname 2>&1) =~ 'transip' ]]; then
-        basecolor=$__bash_bold_blue
-    fi
-    # root wants another color brackets
-    if [ "$(whoami)" = "root" ]; then
-        delcolor=$__bash_bold_red
-        bang='#'
-    fi
     # reflect exit code
-    if [ $exitcode -ne 0 ]; then
-        exitchar="${__bash_bold_red}x"
-    else
-        exitchar="${__bash_txt_green}${okchar}"
-    fi
+    [ $exitcode -ne 0 ] && exitchar="${__bash_bold_red}x"
 
-    PS1="${delcolor}[${basecolor}\u@${myhost} \W${delcolor}] ${lvlprefix}${exitchar} ${__bash_txt_reset}${bang} "
+    PS1="${__bash_delim_color}[${__bash_base_color}\u@${__bash_my_host} \W${__bash_delim_color}] ${__bash_level_prefix}${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
 }
 
 # prefer vim over vi
