@@ -21,6 +21,9 @@ fi
 [ -f /etc/bash_completion ] && . /etc/bash_completion
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
+# custom completions
+complete -W '$(awk "{print \$1}" .ssh/known_hosts)' ssh
+
 export PROMPT_COMMAND=__prompt_command
 
 # define color vars
