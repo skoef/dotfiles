@@ -19,7 +19,6 @@ fi
 
 # bash completion
 [ -f /etc/bash_completion ] && . /etc/bash_completion
-[ -d /etc/bash_completion.d ] && for __f in /etc/bash_completion.d/*; do source ${__f}; done
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 [ -d /usr/local/etc/bash_completion.d ] && for __f in /usr/local/etc/bash_completion.d/*; do source ${__f}; done
 unset __f
