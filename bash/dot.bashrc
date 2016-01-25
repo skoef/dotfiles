@@ -1,8 +1,8 @@
 # Bash preferences
 HISTCONTROL=ignoredups
 HISTFILESIZE=2000
-HISTSIZE=1000
-HISTIGNORE="reboot:shutdown *:history"
+HISTSIZE=10000
+HISTIGNORE="*reboot:*shutdown *:* poweroff:history"
 shopt -s histappend
 shopt -s checkwinsize
 set +o histexpand
