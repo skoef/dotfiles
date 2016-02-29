@@ -43,6 +43,9 @@ set mouse=
 " stop the "Can't open file for writing" rages
 cnoremap sudow w !sudo tee % >/dev/null
 
+"" on opening a file, set cursor to last known position
+au BufReadPost * if line("'\"") | exe "'\"" | endif
+
 "" syntax check wrapper
 au BufWritePost * !~/.vimchk -f %
 
