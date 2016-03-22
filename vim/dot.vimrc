@@ -23,6 +23,10 @@ highlight TrailingWhitespace ctermbg=red guibg=red
 match TrailingWhitespace /\s\+$/
 " add shortkey for toggling listchars
 nnoremap <F11> :set list!<cr>
+" add shortkey for diffupdate in diff mode
+if &diff
+  nnoremap <F5> :diffupdate<cr>
+endif
 
 " enable 'smart' indenting
 set smartindent
