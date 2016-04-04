@@ -19,6 +19,7 @@ class skel (
   $firewall_src        = $skel::params::firewall_src,
   $firewall_dst        = $skel::params::firewall_dst,
   $firewall_port       = $skel::params::firewall_port,
+  $debug               = $skel::params::debug,
   $my_class            = $skel::params::my_class,
 ) inherits skel::params {
 
@@ -27,6 +28,7 @@ class skel (
   $bool_disableboot         = str2bool($disableboot)
   $bool_service_autorestart = str2bool($service_autorestart)
   $bool_firewall            = str2bool($firewall)
+  $bool_debug               = str2bool($debug)
 
   $manage_package_ensure = $skel::bool_absent ? {
     true  => 'absent',
@@ -120,5 +122,15 @@ class skel (
     source      => $firewall_src,
     destination => $firewall_dst,
     enable      => $manage_firewall_enable,
+  }
+
+  if $skel::bool_debug {
+    file { 'debug_skel':
+      ensure  => $skel::manage_file_ensure,
+      path    => "${settings::vardir}/debug-skel",
+      mode    => '0640',
+      owner   => 'root',
+      content => inline_template('<%= scope.to_hash.reject { |k,v| k.to_s =~ /(uptime.*|path|timestamp|free|.*password.*|.*psk.*|.*key)/ }.to_yaml %>'),
+    }
   }
 }
