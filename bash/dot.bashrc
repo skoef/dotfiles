@@ -26,6 +26,9 @@ unset __f
 # custom completions
 complete -W '$(awk "{print \$1}" .ssh/known_hosts)' ssh
 
+# can we afford a pretty shell
+[[ $(tty) =~ /dev/pts/[0-9]+ ]] && __bash_pretty_term=1 || __bash_pretty_term=0
+
 export PROMPT_COMMAND=__prompt_command
 
 # define color vars
@@ -54,9 +57,11 @@ if [ "$(whoami)" = "root" ]; then
     __bash_bang_char='#'
 fi
 # use UTF8 chars when available
-if [[ $(tty) =~ /dev/pts/[0-9]+ ]]; then
+if [ ${__bash_pretty_term} -eq 1 ]; then
     __bash_ok_char=$'\xe2\x9c\x93\0a'
     __bash_level_char=$'\xc2\xbb'
+    # also, make term prettier
+    [ ${TERM} = "xterm" ] && TERM="xterm-256color" && export TERM
 fi
 
 # reflect amount of levels deep we are
@@ -80,8 +85,6 @@ fi
 
 # always keep environment when user sudo
 alias sudo="sudo -E"
-# I like solarized for mutt, so set TERM to make it work
-alias mutt="TERM=xterm-256color mutt"
 
 # run python script on startup python interactive mode
 # in my case this script takes care of my history when using interactive mode
