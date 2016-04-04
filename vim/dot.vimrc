@@ -77,3 +77,24 @@ au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2 nocursorline
 """ Makefile handling
 " don't expand tabs in Makefiles plz
 au FileType make setlocal noexpandtab
+
+"" base statusline color on editing mode
+function! UpdateStatuslineColor(mode)
+  " insert or replace mode
+  if a:mode == 'i' || a:mode == 'r'
+    hi statusline ctermbg=red ctermfg=grey cterm=bold
+  else
+    call ResetStatuslineColor()
+  endif
+endfunction
+
+function! ResetStatuslineColor()
+    hi statusline ctermbg=black ctermfg=grey
+endfunction
+
+au InsertEnter * call UpdateStatuslineColor(v:insertmode)
+au InsertChange * call UpdateStatuslineColor(v:insertmode)
+au InsertLeave * call ResetStatuslineColor()
+
+" set to default colors when entering Vim
+call ResetStatuslineColor()
