@@ -82,14 +82,14 @@ au FileType make setlocal noexpandtab
 function! UpdateStatuslineColor(mode)
   " insert or replace mode
   if a:mode == 'i' || a:mode == 'r'
-    hi statusline ctermbg=red ctermfg=grey cterm=bold
+    hi statusline ctermbg=red ctermfg=black cterm=none
   else
     call ResetStatuslineColor()
   endif
 endfunction
 
 function! ResetStatuslineColor()
-    hi statusline ctermbg=black ctermfg=grey
+  hi statusline ctermbg=black ctermfg=grey cterm=underline
 endfunction
 
 au InsertEnter * call UpdateStatuslineColor(v:insertmode)
