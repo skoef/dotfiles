@@ -26,11 +26,6 @@ unset __f
 # custom completions
 complete -W '$(awk "{print \$1}" .ssh/known_hosts)' ssh
 
-# can we afford a pretty shell
-[[ $(tty) =~ /dev/pts/[0-9]+ ]] && __bash_pretty_term=1 || __bash_pretty_term=0
-
-export PROMPT_COMMAND=__prompt_command
-
 # define color vars
 __bash_bold_green='\[\e[1;32m\]'
 __bash_bold_blue='\[\e[1;34m\]'
@@ -48,7 +43,11 @@ __bash_level_prefix=
 __bash_bang_char='$'
 __bash_ok_char='v'
 __bash_level_char='>'
+__bash_pretty_term=0
 __bash_update_tty=0
+
+# can we afford a pretty shell
+[[ $(tty) =~ /dev/pts/[0-9]+ || $(uname) =~ Darwin ]] && __bash_pretty_term=1
 
 # use different colors at work
 [[ $(hostname -f 2>&1 || hostname 2>&1) =~ 'transip' ]] && __bash_base_color=$__bash_bold_blue
@@ -82,6 +81,7 @@ function __prompt_command() {
     # update window title
     [ $__bash_update_tty -eq 1 ] &&  [ -z "${TMUX_PANE}" ] && echo -n -e '\033k'$(echo $__bash_my_host | sed 's/\(\.[a-z]\{1,\}\)\{2\}$//')'\033\\'
 }
+export PROMPT_COMMAND=__prompt_command
 
 # prefer vim over vi
 if [ ! -z "$(which vim)" -a -x "$(which vim)" ]
