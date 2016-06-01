@@ -48,6 +48,7 @@ __bash_level_prefix=
 __bash_bang_char='$'
 __bash_ok_char='v'
 __bash_level_char='>'
+__bash_update_tty=0
 
 # use different colors at work
 [[ $(hostname -f 2>&1 || hostname 2>&1) =~ 'transip' ]] && __bash_base_color=$__bash_bold_blue
@@ -60,6 +61,7 @@ fi
 if [ ${__bash_pretty_term} -eq 1 ]; then
     __bash_ok_char=$'\xe2\x9c\x93\0a'
     __bash_level_char=$'\xc2\xbb'
+    __bash_update_tty=1
     # also, make term prettier
     [ ${TERM} = "xterm" ] && TERM="xterm-256color" && export TERM
 fi
@@ -74,7 +76,11 @@ function __prompt_command() {
     # reflect exit code
     [ $exitcode -ne 0 ] && exitchar="${__bash_bold_red}x"
 
+    # set prompt
     PS1="${__bash_delim_color}[${__bash_base_color}\u@${__bash_my_host} \W${__bash_delim_color}] ${__bash_level_prefix}${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
+
+    # update window title
+    [ $__bash_update_tty -eq 1 ] &&  [ -z "${TMUX_PANE}" ] && echo -n -e '\033k'$(echo $__bash_my_host | sed 's/\(\.[a-z]\{1,\}\)\{2\}$//')'\033\\'
 }
 
 # prefer vim over vi
