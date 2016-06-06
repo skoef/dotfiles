@@ -25,6 +25,7 @@ unset __f
 
 # custom completions
 complete -W '$(awk "{print \$1}" .ssh/known_hosts)' ssh
+complete -cf sudo
 
 # define color vars
 __bash_bold_green='\[\e[1;32m\]'
