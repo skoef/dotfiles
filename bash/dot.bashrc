@@ -37,6 +37,7 @@ __bash_txt_reset='\[\e[0m\]'
 
 # set prompt defaults
 __bash_my_host=$(hostname -f 2>/dev/null || hostname)
+__bash_my_host_short=$(echo $__bash_my_host | sed 's/\(\.[a-z]\{1,\}\)\{2\}$//')
 __bash_base_color=$__bash_bold_green
 __bash_delim_color=$__bash_txt_white
 __bash_level_prefix=
@@ -70,16 +71,20 @@ fi
 
 function __prompt_command() {
     local exitcode=$? \
-          exitchar="${__bash_txt_green}${__bash_ok_char}"
+          exitchar="${__bash_txt_green}${__bash_ok_char}" \
+          cur_host="${__bash_my_host}"
 
     # reflect exit code
     [ $exitcode -ne 0 ] && exitchar="${__bash_bold_red}x"
 
+    # shorter prompt when screen resolution is low
+    [ ${COLUMNS} -le 80 ] && cur_host="${__bash_my_host_short}"
+
     # set prompt
-    PS1="${__bash_delim_color}[${__bash_base_color}\u@${__bash_my_host} \W${__bash_delim_color}] ${__bash_level_prefix}${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
+    PS1="${__bash_delim_color}[${__bash_base_color}\u@${cur_host} \W${__bash_delim_color}] ${__bash_level_prefix}${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
 
     # update window title
-    [ $__bash_update_tty -eq 1 ] &&  [ -z "${TMUX_PANE}" ] && echo -n -e '\033k'$(echo $__bash_my_host | sed 's/\(\.[a-z]\{1,\}\)\{2\}$//')'\033\\'
+    [ $__bash_update_tty -eq 1 ] &&  [ -z "${TMUX_PANE}" ] && echo -n -e '\033k'${__bash_my_host_short}'\033\\'
 }
 export PROMPT_COMMAND=__prompt_command
 
