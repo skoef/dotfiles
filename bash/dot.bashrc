@@ -83,11 +83,11 @@ function __prompt_command() {
 
     # set prompt
     PS1="${__bash_delim_color}[${__bash_base_color}\u@${cur_host} \W${__bash_delim_color}] ${__bash_level_prefix}${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
-
-    # update window title
-    [ $__bash_update_tty -eq 1 ] &&  [ -z "${TMUX_PANE}" ] && echo -n -e '\033k'${__bash_my_host_short}'\033\\'
 }
 export PROMPT_COMMAND=__prompt_command
+
+# update window title
+[ $__bash_update_tty -eq 1 ] &&  [ -z "${TMUX_PANE}" ] && echo -n -e '\033k'${__bash_my_host_short}'\033\\'
 
 # prefer vim over vi
 if [ ! -z "$(which vim)" -a -x "$(which vim)" ]
