@@ -82,9 +82,24 @@ function __prompt_command() {
     [ ${COLUMNS} -le 80 ] && cur_host="${__bash_my_host_short}"
 
     # set prompt
-    PS1="${__bash_delim_color}[${__bash_base_color}\u@${cur_host} \W${__bash_delim_color}] ${__bash_level_prefix}${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
+    PS1="${__bash_delim_color}[${__bash_base_color}\u@${cur_host} \W${__bash_delim_color}$(parse_git_branch_or_tag)] ${__bash_level_prefix}${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
 }
 export PROMPT_COMMAND=__prompt_command
+
+parse_git_branch () {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+parse_git_tag () {
+  git describe --tags 2> /dev/null
+}
+
+parse_git_branch_or_tag() {
+  local OUT="$(parse_git_branch)"
+  [ "${OUT}" == " ((no branch))" ] && OUT="($(parse_git_tag))"
+  [ -z "${OUT}" ] && return
+  echo " ${OUT}"
+}
 
 # update window title
 [ $__bash_update_tty -eq 1 ] &&  [ -z "${TMUX_PANE}" ] && echo -n -e '\033k'${__bash_my_host_short}'\033\\'
