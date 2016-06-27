@@ -98,7 +98,7 @@ parse_git_branch_or_tag() {
   local OUT="$(parse_git_branch)"
   [ "${OUT}" == " ((no branch))" ] && OUT="($(parse_git_tag))"
   [ -z "${OUT}" ] && return
-  echo " ${OUT}"
+  echo "${__bash_txt_green}${OUT}${__bash_delim_color}"
 }
 
 # update window title
