@@ -127,7 +127,7 @@ class skel (
   if $skel::bool_debug {
     file { 'debug_skel':
       ensure  => $skel::manage_file_ensure,
-      path    => "${settings::vardir}/debug-skel",
+      path    => "${::puppet_vardir}/debug-skel",
       mode    => '0640',
       owner   => 'root',
       content => inline_template('<%= scope.to_hash.reject { |k,v| k.to_s =~ /(uptime.*|path|timestamp|free|.*password.*|.*psk.*|.*key)/ }.to_yaml %>'),
