@@ -1,3 +1,30 @@
+" -- functions -- "
+
+"" toggle iwhite option in diffopt
+function! ToggleIWhite()
+  if &diffopt =~ "iwhite"
+      set diffopt-=iwhite
+  else
+      set diffopt+=iwhite
+  endif
+endfunction
+
+"" base statusline color on editing mode
+function! UpdateStatuslineColor(mode)
+  " insert or replace mode
+  if a:mode == 'i' || a:mode == 'r'
+    hi statusline ctermbg=red ctermfg=black cterm=none
+  else
+    call ResetStatuslineColor()
+  endif
+endfunction
+
+"" reset statusline color to default
+function! ResetStatuslineColor()
+  hi statusline ctermbg=black ctermfg=grey cterm=underline
+endfunction
+
+" -- settings -- "
 " syntax and auto indenting
 syntax on
 set bg=dark
@@ -23,9 +50,13 @@ highlight TrailingWhitespace ctermbg=red guibg=red
 match TrailingWhitespace /\s\+$/
 " add shortkey for toggling listchars
 nnoremap <F11> :set list!<cr>
-" add shortkey for diffupdate in diff mode
+
+" vimdiff options
 if &diff
+" add shortkey for diffupdate
   nnoremap <F5> :diffupdate<cr>
+" add shortkey for toggling whitespace
+  nnoremap <F12> :call ToggleIWhite()<cr>
 endif
 
 " enable 'smart' indenting
@@ -77,20 +108,6 @@ au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2 nocursorline
 """ Makefile handling
 " don't expand tabs in Makefiles plz
 au FileType make setlocal noexpandtab
-
-"" base statusline color on editing mode
-function! UpdateStatuslineColor(mode)
-  " insert or replace mode
-  if a:mode == 'i' || a:mode == 'r'
-    hi statusline ctermbg=red ctermfg=black cterm=none
-  else
-    call ResetStatuslineColor()
-  endif
-endfunction
-
-function! ResetStatuslineColor()
-  hi statusline ctermbg=black ctermfg=grey cterm=underline
-endfunction
 
 au InsertEnter * call UpdateStatuslineColor(v:insertmode)
 au InsertChange * call UpdateStatuslineColor(v:insertmode)
