@@ -52,7 +52,7 @@ __bash_update_tty=0
 [[ $(tty) =~ /dev/pts/[0-9]+ || $(uname) =~ Darwin ]] && __bash_pretty_term=1
 
 # use different colors at work
-[[ $(hostname -f 2>&1 || hostname 2>&1) =~ 'transip' ]] && __bash_base_color=$__bash_bold_blue
+[[ ${__bash_my_host} =~ 'transip' ]] && __bash_base_color=$__bash_bold_blue
 # use slightly different prompt when operating as root
 if [ "$(whoami)" = "root" ]; then
     __bash_delim_color=$__bash_bold_red
