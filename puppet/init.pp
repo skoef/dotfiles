@@ -87,6 +87,14 @@ class skel (
     }
   }
 
+  $manage_debug_ensure = $skel::bool_absent ? {
+    true  => 'absent',
+    false => $skel::bool_debug ? {
+      false => 'absent',
+      true  => 'file',
+    }
+  }
+
   if $skel::my_class != '' {
     include $skel::my_class
   }
@@ -124,13 +132,11 @@ class skel (
     enable      => $manage_firewall_enable,
   }
 
-  if $skel::bool_debug {
-    file { 'debug_skel':
-      ensure  => $skel::manage_file_ensure,
-      path    => "${::puppet_vardir}/debug-skel",
-      mode    => '0640',
-      owner   => 'root',
-      content => inline_template('<%= scope.to_hash.reject { |k,v| k.to_s =~ /(uptime.*|path|timestamp|free|.*password.*|.*psk.*|.*key)/ }.to_yaml %>'),
-    }
+  file { 'debug_skel':
+    ensure  => $skel::manage_debug_ensure,
+    path    => "${::puppet_vardir}/debug-skel",
+    mode    => '0640',
+    owner   => 'root',
+    content => inline_template('<%= scope.to_hash.reject { |k,v| k.to_s =~ /(uptime.*|path|timestamp|free|.*password.*|.*psk.*|.*key)/ }.to_yaml %>'),
   }
 }
