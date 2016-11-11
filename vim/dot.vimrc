@@ -31,6 +31,10 @@ set bg=dark
 set autoindent
 set nomodeline
 
+" easily find files
+set path=**
+set wildmenu
+nmap <C-T> :find<Space>
 " since autoindent and paste don't mix
 " rather bind a key to toggle pasting
 set pastetoggle=<F12>
