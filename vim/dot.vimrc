@@ -35,9 +35,15 @@ set nomodeline
 set path=**
 set wildmenu
 nmap <C-T> :find<Space>
+
 " since autoindent and paste don't mix
 " rather bind a key to toggle pasting
 set pastetoggle=<F12>
+
+" show line numbers
+set number
+highlight LineNr ctermfg=244
+highlight CursorLineNr ctermfg=252 ctermbg=236
 
 " highlight current line
 set cursorline
