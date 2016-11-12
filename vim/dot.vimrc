@@ -44,6 +44,8 @@ set pastetoggle=<F12>
 set number
 highlight LineNr ctermfg=244
 highlight CursorLineNr ctermfg=252 ctermbg=236
+" add shortkey for toggling numbers
+nnoremap <F9> :set number!<cr>
 
 " highlight current line
 set cursorline
