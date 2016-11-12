@@ -92,7 +92,22 @@ cnoremap sudow w !sudo tee % >/dev/null
 au BufReadPost * if line("'\"") | exe "'\"" | endif
 
 "" syntax check wrapper
-au BufWritePost * !~/.vimchk -f %
+" make handling
+set makeprg=~/.vimchk\ -q\ -f\ %
+set errorformat=
+" puppet handling
+au BufWritePost *.pp :make
+set errorformat+=%trror:\ Could\ not\ parse\ for\ environment\ production:\ %m\ at\ %f:%l:%c
+set errorformat+=%f\ -\ %tARNING:\ %m\ on\ line\ %l
+set errorformat+=%f\ -\ %tERROR:\ %m\ on\ line\ %l
+
+" non make handling
+au BufWritePost *.php !~/.vimchk -f %
+au BufWritePost *.erb !~/.vimchk -f %
+au BufWritePost *.rb !~/.vimchk -f %
+au BufWritePost *.py !~/.vimchk -f %
+au BufWritePost *.sh !~/.vimchk -f %
+au BufWritePost *.yaml !~/.vimchk -f %
 
 "" php handling
 " before writing, remove trailing whitespace

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 usage() {
-    echo "$(basename ${0}) -f filename [-t filetype]"
+    echo "$(basename ${0}) [-q] -f filename [-t filetype]"
     exit 1
 }
 
@@ -26,18 +26,26 @@ check() {
     _cmd="${2} 2>&1"
     _regexp=${3}
 
-    echo -n "${_linter}: "
-    [ ! -z "${_regexp}" ] && _cmd="${_cmd} | grep -vE '${_regexp}'"
+    # prepare tmpfile
     if ! _tmpfile=`mktemp -t vimchk.XXXX`; then
         echo "FAIL, could not create tmpfile"
         return 1
     fi
 
+    # perform linting
+    [ $QUIET -eq 0 ] && echo -n "${_linter}: "
+    [ ! -z "${_regexp}" ] && _cmd="${_cmd} | grep -vE '${_regexp}'"
     eval ${_cmd} > ${_tmpfile}
+
+    # handle result
     if [ -s ${_tmpfile} ]; then
-        echo "FAIL:"
-        cat ${_tmpfile}
-    else
+        if [ ${QUIET} -ne 0 ]; then
+            sed "s/\x1B\[\([0-9]\{1,2\}\(;[0-9]\{1,2\}\)\?\)\?[mGK]//g" ${_tmpfile}
+        else
+            echo "FAIL:"
+            cat ${_tmpfile}
+        fi
+    elif [ $QUIET -eq 0 ]; then
         echo "OK"
     fi
 
@@ -113,11 +121,13 @@ lint() {
     esac
 }
 
-while getopts f:t:h opt; do
+QUIET=0
+while getopts f:hqt: opt; do
     case "${opt}" in
         f) filename=${OPTARG} ;;
-        t) filetype=${OPTARG} ;;
         h) usage ;;
+        q) QUIET=1 ;;
+        t) filetype=${OPTARG} ;;
         *) usage ;;
     esac
 done
