@@ -102,9 +102,11 @@ au BufWritePost *.pp :make
 set errorformat+=%trror:\ Could\ not\ parse\ for\ environment\ production:\ %m\ at\ %f:%l:%c
 set errorformat+=%f\ -\ %tARNING:\ %m\ on\ line\ %l
 set errorformat+=%f\ -\ %tERROR:\ %m\ on\ line\ %l
+" php handling
+au BufWritePost *.php :make
+set errorformat+=PHP\ Parse\ %trror:\ %m\ in\ %f\ on\ line\ %l
 
 " non make handling
-au BufWritePost *.php !~/.vimchk -f %
 au BufWritePost *.erb !~/.vimchk -f %
 au BufWritePost *.rb !~/.vimchk -f %
 au BufWritePost *.py !~/.vimchk -f %
