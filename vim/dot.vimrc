@@ -105,11 +105,13 @@ set errorformat+=%f\ -\ %tERROR:\ %m\ on\ line\ %l
 " php handling
 au BufWritePost *.php :make
 set errorformat+=PHP\ Parse\ %trror:\ %m\ in\ %f\ on\ line\ %l
+" python handling
+au BufWritePost *.py :make
+set errorformat+=Python:%f:%l:%c:%m
 
 " non make handling
 au BufWritePost *.erb !~/.vimchk -f %
 au BufWritePost *.rb !~/.vimchk -f %
-au BufWritePost *.py !~/.vimchk -f %
 au BufWritePost *.sh !~/.vimchk -f %
 au BufWritePost *.yaml !~/.vimchk -f %
 
