@@ -83,7 +83,11 @@ lint() {
             ;;
         py|python)
             if haslinter python; then
-                python -c "$(printf "import py_compile,re\ntry:\n  py_compile.compile(r'%s', None, None, True)\nexcept Exception, e:\n  m = re.compile(\"Sorry: .+Error: \('([^']+)', \('([^']+)', (\d+), (\d+),\").match(str(e))\n  print 'Python:%%s:%%d:%%d:%%s' %% (m.group(2), int(m.group(3)), int(m.group(4)), m.group(1))\n" ${filename})"
+                if [ $QUIET -eq 1 ]; then
+                    python -c "$(printf "import py_compile,re\ntry:\n  py_compile.compile(r'%s', None, None, True)\nexcept Exception, e:\n  m = re.compile(\"Sorry: .+Error: \('([^']+)', \('([^']+)', (\d+), (\d+),\").match(str(e))\n  print 'Python:%%s:%%d:%%d:%%s' %% (m.group(2), int(m.group(3)), int(m.group(4)), m.group(1))\n" ${filename})"
+                else
+                    check pyton "python -m py_compile ${filename}; echo"
+                fi
             fi
             ;;
         sh|shell)

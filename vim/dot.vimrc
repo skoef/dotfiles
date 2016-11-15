@@ -94,30 +94,18 @@ cnoremap sudow w !sudo tee % >/dev/null
 au BufReadPost * if line("'\"") | exe "'\"" | endif
 
 "" syntax check wrapper
+au BufWritePost * !~/.vimchk -f %
+
 " make handling
 set makeprg=~/.vimchk\ -q\ -f\ %
 set errorformat=
-" puppet handling
-au BufWritePost *.pp :make
-set errorformat+=%trror:\ Could\ not\ parse\ for\ environment\ production:\ %m\ at\ %f:%l:%c
-set errorformat+=%f\ -\ %tARNING:\ %m\ on\ line\ %l
-set errorformat+=%f\ -\ %tERROR:\ %m\ on\ line\ %l
-" php handling
-au BufWritePost *.php :make
-set errorformat+=PHP\ Parse\ %trror:\ %m\ in\ %f\ on\ line\ %l
-" python handling
-au BufWritePost *.py :make
-set errorformat+=Python:%f:%l:%c:%m
-
-" non make handling
-au BufWritePost *.erb !~/.vimchk -f %
-au BufWritePost *.rb !~/.vimchk -f %
-au BufWritePost *.sh !~/.vimchk -f %
-au BufWritePost *.yaml !~/.vimchk -f %
+nmap <C-R> :make<cr>
 
 "" php handling
 " before writing, remove trailing whitespace
 au BufWritePre *.php :Rtrim
+" php error format
+set errorformat+=PHP\ Parse\ %trror:\ %m\ in\ %f\ on\ line\ %l
 
 "" puppet handling
 " set filetype to puppet
@@ -126,10 +114,16 @@ au BufRead,BufNewFile *.pp setfiletype puppet
 au FileType puppet setlocal tabstop=2 softtabstop=2 shiftwidth=2
 " before writing, remove trailing whitespace
 au BufWritePre *.pp :Rtrim
+" puppet error formats
+set errorformat+=%trror:\ Could\ not\ parse\ for\ environment\ production:\ %m\ at\ %f:%l:%c
+set errorformat+=%f\ -\ %tARNING:\ %m\ on\ line\ %l
+set errorformat+=%f\ -\ %tRROR:\ %m\ on\ line\ %l
 
 "" python handling
 " don't expand tabs in python plz
 au Filetype python setlocal noexpandtab
+" python error format
+set errorformat+=Python:%f:%l:%c:%m
 
 "" yaml handling
 " alter whitespace handling
