@@ -47,10 +47,7 @@ function! UpdateDiffSigns()
 
   " remove any existing signs
   if exists("g:sign_id")
-    while g:sign_id > 0
-      let g:sign_id -= 1
-      execute printf('sign unplace %d', g:sign_id)
-    endwhile
+    sign unplace *
   endif
 
   " place new signs
