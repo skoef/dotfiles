@@ -11,12 +11,11 @@ endfunction
 
 "" toggle displaying numbers and signs
 function! ToggleGutter()
+  set number!
   if &number == 1
-    set nonumber
-    sign unplace *
-  else
-    set number
     call UpdateDiffSigns()
+  else
+    sign unplace *
   endif
 endfunction
 
@@ -41,10 +40,7 @@ function! UpdateDiffSigns()
   " check if file is tracked by git
   if !exists("g:sign_id")
     let l:discard = system(printf('git ls-files %s --error-unmatch', expand('%.p')))
-    if v:shell_error == 0
-      " make sure the sign column is always shown
-      execute printf('sign place %d line=%d name=ForceSignColumn file=%s', 999999, 1, expand('%.p'))
-    else
+    if v:shell_error != 0
       " mark we won't be using diff signs
       let g:no_diff_sign = 1
     endif
@@ -56,9 +52,14 @@ function! UpdateDiffSigns()
     return
   endif
 
-  " remove any existing signs
+  " make sure the sign column is always shown
+  execute printf('sign place %d line=%d name=ForceSignColumn file=%s', 999999, 1, expand('%.p'))
+  " remove all other signs
   if exists("g:sign_id")
-    sign unplace *
+    while g:sign_id > 0
+      let g:sign_id -= 1
+      execute printf('sign unplace %d', g:sign_id)
+    endwhile
   endif
 
   " place new signs
