@@ -9,6 +9,17 @@ function! ToggleIWhite()
   endif
 endfunction
 
+"" toggle displaying numbers and signs
+function! ToggleGutter()
+  if &number == 1
+    set nonumber
+    sign unplace *
+  else
+    set number
+    call UpdateDiffSigns()
+  endif
+endfunction
+
 "" base statusline color on editing mode
 function! UpdateStatuslineColor(mode)
   " insert or replace mode
@@ -158,7 +169,7 @@ set number
 highlight LineNr ctermfg=244
 highlight CursorLineNr ctermfg=252 ctermbg=236
 " add shortkey for toggling numbers
-nnoremap <F9> :set number!<cr>
+nnoremap <F9> :call ToggleGutter()<cr>
 
 " highlight current line
 set cursorline
