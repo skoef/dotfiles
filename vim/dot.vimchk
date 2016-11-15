@@ -100,7 +100,9 @@ lint() {
             fi
             ;;
         yaml)
-            if haslinter ruby; then
+            if haslinter yaml-lint; then
+                check yaml "yaml-lint -q ${filename}" "Syntax OK\$" | sed -E 's/^File : [^,]+, //'
+            elif haslinter ruby; then
                 check yaml "ruby -e \"require 'yaml'; YAML.parse(File.open('${filename}'))\""
             fi
             ;;

@@ -129,6 +129,10 @@ set errorformat+=Python:%f:%l:%c:%m
 " alter whitespace handling
 " disabling cursorline is a major performance increase
 au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2 nocursorline
+set errorformat+=%trror:\ (%f):\ %m\ at\ line\ %l\ column\ %c
+
+"" ruby handling
+set errorformat+=%f:%l:\ %m
 
 """ Makefile handling
 " don't expand tabs in Makefiles plz
