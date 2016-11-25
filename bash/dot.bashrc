@@ -41,7 +41,6 @@ __bash_my_host=$(hostname -f 2>/dev/null || hostname)
 __bash_my_host_short=$(echo $__bash_my_host | sed 's/\(\.[a-z]\{1,\}\)\{2\}$//')
 __bash_base_color=$__bash_bold_green
 __bash_delim_color=$__bash_txt_white
-__bash_level_prefix=
 __bash_bang_char='$'
 __bash_ok_char='v'
 __bash_level_char='>'
@@ -67,9 +66,6 @@ if [ ${__bash_pretty_term} -eq 1 ]; then
     [ ${TERM} = "xterm" ] && TERM="xterm-256color" && export TERM
 fi
 
-# reflect amount of levels deep we are
-[ ${SHLVL} -gt 1 ] && __bash_level_prefix=$(seq $((${SHLVL} - 1)) | xargs -IX echo -n "${__bash_bold_yellow}${__bash_level_char}")" "
-
 function __prompt_command() {
     local exitcode=$? \
           exitchar="${__bash_txt_green}${__bash_ok_char}" \
@@ -82,7 +78,7 @@ function __prompt_command() {
     [ ${COLUMNS} -le 80 ] && cur_host="${__bash_my_host_short}"
 
     # set prompt
-    PS1="${__bash_delim_color}[${__bash_base_color}\u@${cur_host} \W${__bash_delim_color}$(parse_git_branch_or_tag)] ${__bash_level_prefix}${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
+    PS1="${__bash_delim_color}[${__bash_base_color}\u@${cur_host} \W${__bash_delim_color}$(parse_git_branch_or_tag)] ${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
 }
 export PROMPT_COMMAND=__prompt_command
 
@@ -118,4 +114,14 @@ alias sudo="sudo -E"
 if [ -r ${HOME}/.pystartup ]
 then
     PYTHONSTARTUP=${HOME}/.pystartup; export PYTHONSTARTUP
+fi
+
+# detect tmux, but only when not already in tmux
+if [ ! -z "$(which tmux)" ] && [ -z "${TMUX}" ] && [[ ${__bash_my_host} =~ 'skoef' ]]; then
+    # detect if the default session exists
+    if tmux has-session -t "default-${__bash_my_host_short}" 2>/dev/null; then
+        exec tmux attach-session -d -t "default-${__bash_my_host_short}"
+    else
+        exec tmux new-session -s "default-${__bash_my_host_short}" "echo; cat /etc/motd; bash"
+    fi
 fi
