@@ -5,6 +5,7 @@ class skel (
   $absent              = $skel::params::absent,
   $disable             = $skel::params::disable,
   $disableboot         = $skel::params::disableboot,
+  $service_restart     = $skel::params::service_restart,
   $service_autorestart = $skel::params::service_autorestart,
   $config_dir          = $skel::params::config_dir,
   $config_file         = $skel::params::config_file,
@@ -26,6 +27,7 @@ class skel (
   $bool_absent              = str2bool($absent)
   $bool_disable             = str2bool($disable)
   $bool_disableboot         = str2bool($disableboot)
+  $bool_service_restart     = str2bool($service_restart)
   $bool_service_autorestart = str2bool($service_autorestart)
   $bool_firewall            = str2bool($firewall)
   $bool_debug               = str2bool($debug)
@@ -107,6 +109,7 @@ class skel (
   service { 'skel':
     ensure  => $manage_service_ensure,
     name    => $skel::service_name,
+    restart => $bool_service_restart,
     enable  => $manage_service_enable,
     require => Package['skel'],
   }

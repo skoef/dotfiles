@@ -36,6 +36,7 @@ class skel::params {
   $absent              = false
   $disable             = false
   $disableboot         = false
+  $service_restart     = true
   $service_autorestart = true
   $config_file_mode    = '0644'
   $source              = ''
