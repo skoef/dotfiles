@@ -8,6 +8,7 @@ shopt -s checkwinsize
 set +o histexpand
 
 # If not running interactively, don't do anything
+[[ $- != *i* ]] && return
 [ -z "$PS1" ] && return
 
 # replace unix-word-rubout with backward-kill-word
@@ -24,8 +25,7 @@ fi
 unset __f
 
 # custom completions
-complete -W '$(awk "{print \$1}" .ssh/known_hosts)' ssh
-complete -cf sudo
+complete -W '$([ -f .ssh/known_hosts ] && awk "{print \$1}" .ssh/known_hosts | awk -F"," "{print \$1}")' ssh
 
 # define color vars
 __bash_bold_green='\[\e[1;32m\]'
@@ -101,13 +101,7 @@ parse_git_branch_or_tag() {
 [ $__bash_update_tty -eq 1 ] &&  [ -z "${TMUX_PANE}" ] && echo -n -e '\033k'${__bash_my_host_short}'\033\\'
 
 # prefer vim over vi
-if [ ! -z "$(which vim)" -a -x "$(which vim)" ]
-then
-    alias vi="vim"
-fi
-
-# always keep environment when user sudo
-alias sudo="sudo -E"
+[ ! -z "$(which vim 2>/dev/null)" ] && alias vi="vim"
 
 # run python script on startup python interactive mode
 # in my case this script takes care of my history when using interactive mode
@@ -117,7 +111,7 @@ then
 fi
 
 # detect tmux, but only when not already in tmux
-if [ ! -z "$(which tmux)" ] && [ -z "${TMUX}" ] && [[ ${__bash_my_host} =~ 'skoef' ]]; then
+if [ ! -z "$(which tmux 2>/dev/null)" ] && [ -z "${TMUX}" ] && [[ ${__bash_my_host} =~ 'skoef' ]]; then
     # detect if the default session exists
     if tmux has-session -t "default-${__bash_my_host_short}" 2>/dev/null; then
         exec tmux attach-session -d -t "default-${__bash_my_host_short}"
