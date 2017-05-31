@@ -159,7 +159,8 @@ set nomodeline
 " easily find files
 set path=**
 set wildmenu
-nmap <C-T> :find<Space>
+" open files in new tab
+nmap <C-T> :tabfind<Space>
 
 " since autoindent and paste don't mix
 " rather bind a key to toggle pasting
@@ -179,6 +180,12 @@ hi CursorLine cterm=NONE ctermbg=235 guibg=#262626
 " show line/progress at bottom right
 set ruler
 set laststatus=2
+
+" show tab line, even on 1 tab
+set showtabline=2
+" set up easily moving through tabs
+nmap <C-[> :tabp<cr>
+nmap <C-]> :tabn<cr>
 
 " use :set list to show invisibles
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
