@@ -153,6 +153,7 @@ endfunction
 " syntax and auto indenting
 syntax on
 set bg=dark
+colorscheme dracula
 set autoindent
 set nomodeline
 
@@ -168,14 +169,11 @@ set pastetoggle=<F12>
 
 " show line numbers
 set number
-highlight LineNr ctermfg=244
-highlight CursorLineNr ctermfg=252 ctermbg=236
 " add shortkey for toggling numbers
 nnoremap <F9> :call ToggleGutter()<cr>
 
 " highlight current line
 set cursorline
-hi CursorLine cterm=NONE ctermbg=235 guibg=#262626
 
 " show line/progress at bottom right
 set ruler
@@ -184,8 +182,8 @@ set laststatus=2
 " show tab line, even on 1 tab
 set showtabline=2
 " set up easily moving through tabs
-nmap <C-[> :tabp<cr>
-nmap <C-]> :tabn<cr>
+nnoremap < :tabp<cr>
+nnoremap > :tabn<cr>
 
 " use :set list to show invisibles
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
