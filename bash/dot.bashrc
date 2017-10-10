@@ -1,11 +1,22 @@
 # Bash preferences
 HISTCONTROL=ignoredups
-HISTFILESIZE=2000
-HISTSIZE=10000
+HISTFILESIZE=10000
+HISTSIZE=100000
 HISTIGNORE="*reboot:*shutdown *:* poweroff:history"
+HISTTIMEFORMAT='%F %T '
+# Append to the history file, don't overwrite it
 shopt -s histappend
-shopt -s checkwinsize
 set +o histexpand
+# Update window size after every command
+shopt -s checkwinsize
+
+# Display matches for ambiguous patterns at first tab press
+bind "set show-all-if-ambiguous on"
+
+# Correct spelling errors during tab-completion
+shopt -s dirspell
+# Correct spelling errors in arguments supplied to cd
+shopt -s cdspell
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -20,6 +31,7 @@ fi
 
 # bash completion
 [ -f /etc/bash_completion ] && . /etc/bash_completion
+[ -d /etc/bash_completion.d ] && for __f in /etc/bash_completion.d/*; do source ${__f}; done
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 [ -d /usr/local/etc/bash_completion.d ] && for __f in /usr/local/etc/bash_completion.d/*; do source ${__f}; done
 unset __f
