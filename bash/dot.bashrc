@@ -51,7 +51,6 @@ __bash_txt_reset='\[\e[0m\]'
 # set prompt defaults
 __bash_my_host=$(hostname -f 2>/dev/null || hostname)
 __bash_my_host_short=$(echo $__bash_my_host | sed 's/\(\.[a-z]\{1,\}\)\{2\}$//')
-__bash_base_color=$__bash_bold_green
 __bash_delim_color=$__bash_txt_white
 __bash_bang_char='$'
 __bash_ok_char='v'
@@ -62,8 +61,6 @@ __bash_update_tty=0
 # can we afford a pretty shell
 [[ $(tty) =~ /dev/pts/[0-9]+ || $(uname) =~ Darwin ]] && __bash_pretty_term=1
 
-# use different colors at work
-[[ ${__bash_my_host} =~ 'transip' ]] && __bash_base_color=$__bash_bold_blue
 # use slightly different prompt when operating as root
 if [ "$(whoami)" = "root" ]; then
     __bash_delim_color=$__bash_bold_red
@@ -74,9 +71,18 @@ if [ ${__bash_pretty_term} -eq 1 ]; then
     __bash_ok_char=$'\xe2\x9c\x93\0a'
     __bash_level_char=$'\xc2\xbb'
     __bash_update_tty=1
+    # choose smoother colors
+    __bash_bold_green=$'\x1b[38;2;98;195;79m'
+    __bash_bold_blue=$'\x1b[38;2;61;175;239m'
+    __bash_bold_red=$'\x1b[38;2;224;108;75m'
+    __bash_bold_yellow=$'\x1b[38;2;229;192;123m'
     # also, make term prettier
     [ ${TERM} = "xterm" ] && TERM="xterm-256color" && export TERM
 fi
+
+# use different colors at work
+__bash_base_color=$__bash_bold_green
+[[ ${__bash_my_host} =~ 'transip' ]] && __bash_base_color=$__bash_bold_blue
 
 function __prompt_command() {
     local exitcode=$? \
