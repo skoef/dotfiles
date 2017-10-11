@@ -5,18 +5,18 @@ HISTSIZE=100000
 HISTIGNORE="*reboot:*shutdown *:* poweroff:history"
 HISTTIMEFORMAT='%F %T '
 # Append to the history file, don't overwrite it
-shopt -s histappend
+shopt -s histappend 2>/dev/null
 set +o histexpand
 # Update window size after every command
-shopt -s checkwinsize
+shopt -s checkwinsize 2>/dev/null
 
 # Display matches for ambiguous patterns at first tab press
 bind "set show-all-if-ambiguous on"
 
 # Correct spelling errors during tab-completion
-shopt -s dirspell
+shopt -s dirspell 2>/dev/null
 # Correct spelling errors in arguments supplied to cd
-shopt -s cdspell
+shopt -s cdspell 2>/dev/null
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
