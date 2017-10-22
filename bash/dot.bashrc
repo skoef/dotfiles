@@ -71,11 +71,6 @@ if [ ${__bash_pretty_term} -eq 1 ]; then
     __bash_ok_char=$'\xe2\x9c\x93\0a'
     __bash_level_char=$'\xc2\xbb'
     __bash_update_tty=1
-    # choose smoother colors
-    __bash_bold_green=$'\x1b[38;2;98;195;79m'
-    __bash_bold_blue=$'\x1b[38;2;61;175;239m'
-    __bash_bold_red=$'\x1b[38;2;224;108;75m'
-    __bash_bold_yellow=$'\x1b[38;2;229;192;123m'
     # also, make term prettier
     [ ${TERM} = "xterm" ] && TERM="xterm-256color" && export TERM
 fi
