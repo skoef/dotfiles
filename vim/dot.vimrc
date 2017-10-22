@@ -214,6 +214,9 @@ set shiftwidth=4
 set expandtab
 command Rtrim :%s/\s\+$//e
 
+" 80 chars marker
+set colorcolumn=80
+
 " please no mouse handling
 set mouse=
 
