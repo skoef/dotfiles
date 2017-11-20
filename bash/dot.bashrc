@@ -77,7 +77,11 @@ fi
 
 # use different colors at work
 __bash_base_color=$__bash_bold_green
-[[ ${__bash_my_host} =~ 'transip' ]] && __bash_base_color=$__bash_bold_blue
+__bash_path_color=$__bash_bold_blue
+if [[ ${__bash_my_host} =~ 'transip' ]]; then
+    __bash_base_color=$__bash_bold_blue
+    __bash_path_color=$__bash_bold_green
+fi
 
 function __prompt_command() {
     local exitcode=$? \
@@ -91,7 +95,7 @@ function __prompt_command() {
     [ ${COLUMNS} -le 80 ] && cur_host="\h"
 
     # set prompt
-    PS1="${__bash_delim_color}[${__bash_base_color}\u@${cur_host} \W${__bash_delim_color}$(parse_git_branch_or_tag)] ${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
+    PS1="${__bash_delim_color}[${__bash_base_color}\u@${cur_host} ${__bash_path_color}\W${__bash_delim_color}$(parse_git_branch_or_tag)] ${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
 }
 export PROMPT_COMMAND=__prompt_command
 
