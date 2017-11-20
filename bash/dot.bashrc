@@ -82,13 +82,13 @@ __bash_base_color=$__bash_bold_green
 function __prompt_command() {
     local exitcode=$? \
           exitchar="${__bash_txt_green}${__bash_ok_char}" \
-          cur_host="${__bash_my_host}"
+          cur_host="\H"
 
     # reflect exit code
     [ $exitcode -ne 0 ] && exitchar="${__bash_bold_red}x"
 
     # shorter prompt when screen resolution is low
-    [ ${COLUMNS} -le 80 ] && cur_host="${__bash_my_host_short}"
+    [ ${COLUMNS} -le 80 ] && cur_host="\h"
 
     # set prompt
     PS1="${__bash_delim_color}[${__bash_base_color}\u@${cur_host} \W${__bash_delim_color}$(parse_git_branch_or_tag)] ${exitchar} ${__bash_txt_reset}${__bash_bang_char} "
