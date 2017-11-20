@@ -18,7 +18,7 @@ if [ -r /etc/timezone ]; then
 fi
 
 # compose path
-PATH="~/bin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
+PATH="~/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
 [ -d /usr/local/adm/bin ] && PATH="${PATH}:/usr/local/adm/bin"
 [ -d /usr/local/php/tools ] && PATH="${PATH}:/usr/local/php/tools"
 # solaris/openindiana specific paths
