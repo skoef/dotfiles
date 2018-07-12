@@ -10,9 +10,6 @@ set +o histexpand
 # Update window size after every command
 shopt -s checkwinsize 2>/dev/null
 
-# Display matches for ambiguous patterns at first tab press
-bind "set show-all-if-ambiguous on"
-
 # Correct spelling errors during tab-completion
 shopt -s dirspell 2>/dev/null
 # Correct spelling errors in arguments supplied to cd
