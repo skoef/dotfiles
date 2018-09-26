@@ -13,7 +13,7 @@ class skel (
   String               $package_version         = $skel::params::package_version,
   Stdlib::Absolutepath $config_file             = $skel::params::config_file,
   Stdlib::Absolutepath $config_dir              = $skel::params::config_dir,
-  String               $source                  = $skel::params::source,
+  Optional[String]     $source                  = $skel::params::source,
   String               $template                = $skel::params::template,
   Hash                 $options                 = {},
 ) inherits skel::params {

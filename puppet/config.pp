@@ -24,7 +24,7 @@ class skel::config {
     }),
   }
 
-  $manage_file_notify => $skel::service_autorestart ? {
+  $manage_file_notify = $skel::service_autorestart ? {
     true  => Service['skel'],
     false => undef,
   }
