@@ -1,8 +1,13 @@
 # Bash preferences
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+[ -z "$PS1" ] && return
+
 HISTCONTROL=ignoredups
 HISTFILESIZE=10000
 HISTSIZE=100000
-HISTIGNORE="*reboot:*shutdown *:* poweroff:history"
+HISTIGNORE="*reboot:*shutdown *:* poweroff:history:*kexec*"
 HISTTIMEFORMAT='%F %T '
 # Append to the history file, don't overwrite it
 shopt -s histappend 2>/dev/null
@@ -15,19 +20,12 @@ shopt -s dirspell 2>/dev/null
 # Correct spelling errors in arguments supplied to cd
 shopt -s cdspell 2>/dev/null
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-[ -z "$PS1" ] && return
-
 # replace unix-word-rubout with backward-kill-word
 if [ ! -z "${TERM}" ] && [ "${TERM}" != "dumb" ]
 then
     stty werase undef
     bind '"\C-w": backward-kill-word'
 fi
-
-# custom completions
-complete -W '$([ -f .ssh/known_hosts ] && awk "{print \$1}" .ssh/known_hosts | awk -F"," "{print \$1}")' ssh
 
 # define color vars
 __bash_bold_green='\[\e[1;32m\]'
@@ -115,14 +113,4 @@ parse_git_branch_or_tag() {
 if [ -r ${HOME}/.pystartup ]
 then
     PYTHONSTARTUP=${HOME}/.pystartup; export PYTHONSTARTUP
-fi
-
-# detect tmux, but only when not already in tmux
-if [ ! -z "$(which tmux 2>/dev/null)" ] && [ -z "${TMUX}" ] && [[ ${__bash_my_host} =~ 'skoef' ]]; then
-    # detect if the default session exists
-    if tmux has-session -t "default-${__bash_my_host_short}" 2>/dev/null; then
-        exec tmux attach-session -d -t "default-${__bash_my_host_short}"
-    else
-        exec tmux new-session -s "default-${__bash_my_host_short}" "echo; cat /etc/motd; bash"
-    fi
 fi
