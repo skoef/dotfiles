@@ -156,6 +156,10 @@ set bg=dark
 colorscheme dracula
 set autoindent
 set nomodeline
+" enable true color if available
+if exists('+termguicolors')
+  set termguicolors
+endif
 
 " easily find files
 set path=**
