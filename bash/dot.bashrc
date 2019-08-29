@@ -76,6 +76,9 @@ function __prompt_command() {
           exitchar="${__bash_txt_green}${__bash_ok_char}" \
           cur_host="\H"
 
+    # write to history immediately
+    history -a
+
     # reflect exit code
     [ $exitcode -ne 0 ] && exitchar="${__bash_bold_red}x"
 
