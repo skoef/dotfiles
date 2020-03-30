@@ -101,12 +101,15 @@ bindkey "^[[F" end-of-line
 # Styled prompt
 if [[ $(hostname -f 2>/dev/null || hostname) =~ transip ]]; then
   local _prompt_color_host=blue
-  local _prompt_color_path=gree
+  local _prompt_color_path=green
 else
   local _prompt_color_host=green
   local _prompt_color_path=blue
 fi
-PROMPT=" [%B%F{\${_prompt_color_host}}%n@%m%f%b %B%F{\${_prompt_color_path}}%1~%f%b\${vcs_info_msg_0_}] %# "
+# shorter prompt when screen size is low
+[ ${COLUMNS} -le 80 ] && _prompt_host_char="%m" || _prompt_host_char="%M"
+
+PROMPT=" [%B%F{\${_prompt_color_host}}%n@\${_prompt_host_char}%f%b %B%F{\${_prompt_color_path}}%1~%f%b\${vcs_info_msg_0_}] %# "
 
 # Useful support for interacting with Terminal.app or other terminal programs
 [ -r "/etc/zshrc_$TERM_PROGRAM" ] && . "/etc/zshrc_$TERM_PROGRAM"
