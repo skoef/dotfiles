@@ -1,0 +1,17 @@
+{
+    "atomKeymap.promptV3Features": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.formatOnPaste": true,
+    "workbench.startupEditor": "newUntitledFile",
+    "go.formatTool": "goimports",
+    "go.useLanguageServer": true,
+    "go.coverageOptions": "showUncoveredCodeOnly",
+    "go.coverOnSave": true,
+    
+    "puppet.editorService.formatOnType.enable": true,
+    "editor.fontFamily": "Menlo, Consolas, DejaVu Sans Mono, monospace",
+    "editor.fontSize": 14,
+    "workbench.colorTheme": "One Dark Theme",
+    "editor.renderWhitespace": "all",
+    "files.insertFinalNewline": true
+}
