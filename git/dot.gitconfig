@@ -7,3 +7,14 @@
     renames = true
 [color]
     ui = true
+
+[url "ssh://git@gitlab.com/maxem/"]
+    insteadOf = https://gitlab.com/maxem/
+
+[includeIf "gitdir:/Users/rschoof/Documents/Maxem/"]
+  path = .gitconfig-maxem
+[pull]
+	rebase = false
+
+[init]
+	defaultBranch = main

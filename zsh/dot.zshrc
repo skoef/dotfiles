@@ -23,8 +23,8 @@ setopt HIST_FIND_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 
 HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-HISTSIZE=10000
-SAVEHIST=1000
+HISTSIZE=100000
+SAVEHIST=100000
 
 # Ctrl-W deletes to first /
 backward-kill-dir () {
@@ -43,6 +43,15 @@ zstyle ':vcs_info:git:*' formats ' (%F{green}%b%f)'
 
 # Set up the prompt (with git branch name)
 setopt PROMPT_SUBST
+
+# see if we need to set up kubernetes aware prompts
+if [ -f ${HOME}/.zsh/kubectl.zsh ]; then
+    autoload -U colors; colors
+    source ${HOME}/.zsh/kubectl.zsh
+
+    #_kube_prompt='[%{$fg[cyan]%}$ZSH_KUBECTL_PROMPT%{$reset_color%}]'
+    _kube_prompt='(%{$fg[cyan]%}$ZSH_KUBECTL_PROMPT%{$reset_color%})'
+fi
 
 # Beep on error
 setopt BEEP
@@ -99,18 +108,34 @@ bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
 
 # Styled prompt
-if [[ $(hostname -f 2>/dev/null || hostname) =~ transip ]]; then
-  local _prompt_color_host=blue
-  local _prompt_color_path=green
-else
-  local _prompt_color_host=green
-  local _prompt_color_path=blue
-fi
-# shorter prompt when screen size is low
-[ ${COLUMNS} -le 80 ] && _prompt_host_char="%m" || _prompt_host_char="%M"
+local _prompt_color_host=green
+local _prompt_color_path=blue
 
-PROMPT=" [%B%F{\${_prompt_color_host}}%n@\${_prompt_host_char}%f%b %B%F{\${_prompt_color_path}}%1~%f%b\${vcs_info_msg_0_}] %# "
+PROMPT=" [%B%F{\${_prompt_color_host}}%n%f%b %B%F{\${_prompt_color_path}}%1~%f%b\${vcs_info_msg_0_}"
+[ -n "${_kube_prompt}" ] && PROMPT="${PROMPT} ${_kube_prompt}"
+PROMPT="${PROMPT}] %# "
+
+[ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:${PATH}"
+[ -d /opt/homebrew/sbin ] && export PATH="/opt/homebrew/sbin:${PATH}"
+[ -d ${HOME}/bin ] && export PATH="${HOME}/bin:${PATH}"
+[ -d ${HOME}/go/bin ] && export PATH="${HOME}/go/bin:${PATH}"
 
 # Useful support for interacting with Terminal.app or other terminal programs
 [ -r "/etc/zshrc_$TERM_PROGRAM" ] && . "/etc/zshrc_$TERM_PROGRAM"
 [ -r ~/.iterm2_shell_integration.zsh ] && . ~/.iterm2_shell_integration.zsh
+
+# auto completion
+zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+fpath=(~/.zsh $fpath)
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  autoload -Uz compinit
+  compinit
+fi
+
+autoload -Uz compinit && compinit
+
+# enable zoxide
+eval "$(zoxide init zsh)"
