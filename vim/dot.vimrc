@@ -153,7 +153,7 @@ endfunction
 " syntax and auto indenting
 syntax on
 set bg=dark
-colorscheme dracula
+colorscheme slate
 set autoindent
 set nomodeline
 " enable true color if available
