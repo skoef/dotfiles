@@ -230,48 +230,28 @@ cnoremap sudow w !sudo tee % >/dev/null
 "" on opening a file, set cursor to last known position
 au BufReadPost * if line("'\"") | exe "'\"" | endif
 
-"" syntax check wrapper
-au BufWritePost * !~/.vimchk -f %
-
-" make handling
-set makeprg=~/.vimchk\ -q\ -f\ %
-set errorformat=
-nmap <C-R> :make<cr>
-
-"" php handling
+"" php config
 " before writing, remove trailing whitespace
 au BufWritePre *.php :Rtrim
-" php error format
-set errorformat+=PHP\ Parse\ %trror:\ %m\ in\ %f\ on\ line\ %l
 
-"" puppet handling
+"" puppet config
 " set filetype to puppet
 au BufRead,BufNewFile *.pp setfiletype puppet
 " alter whitespace handling
 au FileType puppet setlocal tabstop=2 softtabstop=2 shiftwidth=2
 " before writing, remove trailing whitespace
 au BufWritePre *.pp :Rtrim
-" puppet error formats
-set errorformat+=%trror:\ Could\ not\ parse\ for\ environment\ production:\ %m\ at\ %f:%l:%c
-set errorformat+=%f\ -\ %tARNING:\ %m\ on\ line\ %l
-set errorformat+=%f\ -\ %tRROR:\ %m\ on\ line\ %l
 
-"" python handling
+"" python config
 " don't expand tabs in python plz
 au Filetype python setlocal noexpandtab
-" python error format
-set errorformat+=Python:%f:%l:%c:%m
 
-"" yaml handling
+"" yaml config
 " alter whitespace handling
 " disabling cursorline is a major performance increase
 au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2 nocursorline
-set errorformat+=%trror:\ (%f):\ %m\ at\ line\ %l\ column\ %c
 
-"" ruby handling
-set errorformat+=%f:%l:\ %m
-
-""" Makefile handling
+""" Makefile config
 " don't expand tabs in Makefiles plz
 au FileType make setlocal noexpandtab
 
