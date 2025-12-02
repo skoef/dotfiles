@@ -127,7 +127,6 @@ PROMPT="${PROMPT}] %# "
 [ -r ~/.iterm2_shell_integration.zsh ] && . ~/.iterm2_shell_integration.zsh
 
 # auto completion
-zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
 if type brew &>/dev/null
 then
@@ -143,3 +142,5 @@ autoload -Uz compinit && compinit
 if command -v zoxide >/dev/null; then
   eval "$(zoxide init zsh)"
 fi
+
+alias gitb="git checkout \$(git branch | fzf)"
