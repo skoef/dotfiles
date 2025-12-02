@@ -21,6 +21,8 @@ setopt HIST_IGNORE_DUPS
 setopt HIST_FIND_NO_DUPS
 # removes blank lines from history
 setopt HIST_REDUCE_BLANKS
+# ignore commands prefixed with a space from history
+setopt HIST_IGNORE_SPACE
 
 HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
 HISTSIZE=100000
