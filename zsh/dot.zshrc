@@ -143,4 +143,4 @@ if command -v zoxide >/dev/null; then
   eval "$(zoxide init zsh)"
 fi
 
-alias gitb="git checkout \$(git branch | fzf)"
+alias gitb="git checkout \$(git branch | sort | fzf)"
