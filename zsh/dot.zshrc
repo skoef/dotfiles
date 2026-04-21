@@ -46,15 +46,6 @@ zstyle ':vcs_info:git:*' formats ' (%F{green}%b%f)'
 # Set up the prompt (with git branch name)
 setopt PROMPT_SUBST
 
-# see if we need to set up kubernetes aware prompts
-if [ -f ${HOME}/.zsh/kubectl.zsh ]; then
-    autoload -U colors; colors
-    source ${HOME}/.zsh/kubectl.zsh
-
-    #_kube_prompt='[%{$fg[cyan]%}$ZSH_KUBECTL_PROMPT%{$reset_color%}]'
-    _kube_prompt='(%{$fg[cyan]%}$ZSH_KUBECTL_PROMPT%{$reset_color%})'
-fi
-
 # Beep on error
 setopt BEEP
 
@@ -109,14 +100,6 @@ fi
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
 
-# Styled prompt
-local _prompt_color_host=green
-local _prompt_color_path=blue
-
-PROMPT=" [%B%F{\${_prompt_color_host}}%n%f%b %B%F{\${_prompt_color_path}}%1~%f%b\${vcs_info_msg_0_}"
-[ -n "${_kube_prompt}" ] && PROMPT="${PROMPT} ${_kube_prompt}"
-PROMPT="${PROMPT}] %# "
-
 [ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:${PATH}"
 [ -d /opt/homebrew/sbin ] && export PATH="/opt/homebrew/sbin:${PATH}"
 [ -d ${HOME}/bin ] && export PATH="${HOME}/bin:${PATH}"
@@ -124,16 +107,20 @@ PROMPT="${PROMPT}] %# "
 
 # Useful support for interacting with Terminal.app or other terminal programs
 [ -r "/etc/zshrc_$TERM_PROGRAM" ] && . "/etc/zshrc_$TERM_PROGRAM"
-[ -r ~/.iterm2_shell_integration.zsh ] && . ~/.iterm2_shell_integration.zsh
+[ -r ${HOME}/.iterm2_shell_integration.zsh ] && . ${HOME}/.iterm2_shell_integration.zsh
+
+# load additional plugins
+if [ -r /opt/homebrew/opt/kube-ps1/share/kube-ps1.sh ]; then
+    KUBE_PS1_CTX_COLOR=cyan
+    KUBE_PS1_SYMBOL_ENABLE=false
+    . /opt/homebrew/opt/kube-ps1/share/kube-ps1.sh
+fi
 
 # auto completion
 fpath=(~/.zsh $fpath)
 if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
-  autoload -Uz compinit
-  compinit
 fi
 
 autoload -Uz compinit && compinit
@@ -144,3 +131,7 @@ if command -v zoxide >/dev/null; then
 fi
 
 alias gitb="git checkout \$(git branch | sort | fzf)"
+
+# customize prompt
+# shows [cwd (kubectx/kubens)] %
+PROMPT=" [%B%F{blue}%1~%f%b\${vcs_info_msg_0_} \$(kube_ps1)] %# "
