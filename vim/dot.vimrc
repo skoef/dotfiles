@@ -37,9 +37,14 @@ endfunction
 "" update diff signs
 "" relevant parts stolen from vim-signify
 function! UpdateDiffSigns()
+  " nothing to diff for unnamed buffers
+  if empty(expand('%:p'))
+    return
+  endif
+
   " check if file is tracked by git
   if !exists("g:sign_id")
-    let l:discard = system(printf('git ls-files %s --error-unmatch', expand('%.p')))
+    let l:discard = system(printf('git ls-files %s --error-unmatch', expand('%:p')))
     if v:shell_error != 0
       " mark we won't be using diff signs
       let g:no_diff_sign = 1
@@ -53,7 +58,7 @@ function! UpdateDiffSigns()
   endif
 
   " make sure the sign column is always shown
-  execute printf('sign place %d line=%d name=ForceSignColumn file=%s', 999999, 1, expand('%.p'))
+  execute printf('sign place %d line=%d name=ForceSignColumn file=%s', 999999, 1, expand('%:p'))
   " remove all other signs
   if exists("g:sign_id")
     while g:sign_id > 0
@@ -64,7 +69,7 @@ function! UpdateDiffSigns()
 
   " place new signs
   let g:sign_id = 1
-  let diff = system(printf('git diff --no-color --no-ext-diff -U0 -- %s', expand('%.p')))
+  let diff = system(printf('git diff --no-color --no-ext-diff -U0 -- %s', expand('%:p')))
   for line in filter(split(diff, '\n'), 'v:val =~ "^@@ "')
     let tokens = matchlist(line, '^@@ -\v(\d+),?(\d*) \+(\d+),?(\d*)')
 
@@ -84,7 +89,7 @@ function! UpdateDiffSigns()
       while offset < new_count
         let line    = new_line + offset
         let offset += 1
-        execute printf('sign place %d line=%d name=DiffAdd file=%s', g:sign_id, line, expand('%.p'))
+        execute printf('sign place %d line=%d name=DiffAdd file=%s', g:sign_id, line, expand('%:p'))
         let g:sign_id += 1
       endwhile
 
@@ -100,7 +105,7 @@ function! UpdateDiffSigns()
       while offset < new_count
         let line    = new_line + offset
         let offset += 1
-        execute printf('sign place %d line=%d name=DiffChange file=%s', g:sign_id, line, expand('%.p'))
+        execute printf('sign place %d line=%d name=DiffChange file=%s', g:sign_id, line, expand('%:p'))
         let g:sign_id += 1
       endwhile
     else
@@ -119,7 +124,7 @@ function! UpdateDiffSigns()
         while offset < new_count - 1
           let line    = new_line + offset
           let offset += 1
-          execute printf('sign place %d line=%d name=DiffChange file=%s', g:sign_id, line, expand('%.p'))
+          execute printf('sign place %d line=%d name=DiffChange file=%s', g:sign_id, line, expand('%:p'))
           let g:sign_id += 1
         endwhile
 
@@ -135,13 +140,13 @@ function! UpdateDiffSigns()
         while offset < old_count
           let line    = new_line + offset
           let offset += 1
-          execute printf('sign place %d line=%d name=DiffChange file=%s', g:sign_id, line, expand('%.p'))
+          execute printf('sign place %d line=%d name=DiffChange file=%s', g:sign_id, line, expand('%:p'))
           let g:sign_id += 1
         endwhile
         while offset < new_count
           let line    = new_line + offset
           let offset += 1
-          execute printf('sign place %d line=%d name=DiffAdd file=%s', g:sign_id, line, expand('%.p'))
+          execute printf('sign place %d line=%d name=DiffAdd file=%s', g:sign_id, line, expand('%:p'))
           let g:sign_id += 1
         endwhile
       endif
