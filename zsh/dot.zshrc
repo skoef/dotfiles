@@ -5,7 +5,10 @@ plugins=(iterm2 kube-ps1 zoxide)
 source $ZSH/oh-my-zsh.sh
 
 # tweak history settings
-# append to history file right away
+# don't share history between running sessions (oh-my-zsh enables SHARE_HISTORY, which
+# imports other sessions' commands immediately and overrides APPEND_HISTORY)
+unsetopt SHARE_HISTORY
+# merge this session's history into the file on exit instead of overwriting it
 setopt APPEND_HISTORY
 #ignore duplicates when searching
 setopt HIST_FIND_NO_DUPS
