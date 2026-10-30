@@ -5,6 +5,12 @@ plugins=(iterm2 kube-ps1 zoxide)
 # prevent default aliases from being set
 zstyle ':omz:*' aliases no
 
+# make sure our pager exits if the contents fit on one page
+export PAGER="less -F -X"
+
+# file matching should be case sensitive
+CASE_SENSITIVE="true"
+
 # start oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
@@ -26,6 +32,10 @@ SAVEHIST=100000
 alias assume=". assume"
 alias gitb="git checkout \$(git branch | sort | fzf)"
 alias terraform=tofu
+
+# some custom key bindings
+bindkey "^[[1;3C" forward-word # alt-right
+bindkey "^[[1;3D" backward-word # alt-left
 
 # configure git prompt
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$reset_color%}(%{$fg[green]%}"
