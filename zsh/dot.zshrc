@@ -1,6 +1,12 @@
 export ZSH="$HOME/.oh-my-zsh"
 
-plugins=(iterm2 kube-ps1 zoxide)
+plugins=(
+  direnv
+  iterm2
+  kube-ps1
+  zoxide
+  zsh-autosuggestions
+)
 
 # prevent default aliases from being set
 zstyle ':omz:*' aliases no
