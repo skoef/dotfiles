@@ -2,6 +2,10 @@ export ZSH="$HOME/.oh-my-zsh"
 
 plugins=(iterm2 kube-ps1 zoxide)
 
+# prevent default aliases from being set
+zstyle ':omz:*' aliases no
+
+# start oh-my-zsh
 source $ZSH/oh-my-zsh.sh
 
 # tweak history settings
@@ -17,10 +21,6 @@ setopt HIST_REDUCE_BLANKS
 
 HISTSIZE=100000
 SAVEHIST=100000
-
-# revert some aliases
-unalias ls
-unalias grep
 
 # add some aliases
 alias assume=". assume"
