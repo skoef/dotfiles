@@ -36,7 +36,11 @@ SAVEHIST=100000
 
 # add some aliases
 alias assume=". assume"
-alias gitb="git checkout \$(git branch | sort | fzf)"
+gitb() {
+  local branch
+  branch=$(git branch | sed 's/^[* +]*//' | sort | fzf --query "$*" --select-1) || return
+  [[ -n $branch ]] && git checkout "$branch"
+}
 alias terraform=tofu
 
 # some custom key bindings
